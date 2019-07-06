@@ -39,9 +39,9 @@
  
 #pragma once
 
+#include <pcl/pcl_config.h>
 #ifdef HAVE_QHULL
 
-#include <pcl/pcl_config.h>
 #include <pcl/surface/convex_hull.h>
 
 namespace pcl
@@ -55,8 +55,8 @@ namespace pcl
   class ConcaveHull : public MeshConstruction<PointInT>
   {
     protected:
-      typedef boost::shared_ptr<ConcaveHull<PointInT> > Ptr;
-      typedef boost::shared_ptr<const ConcaveHull<PointInT> > ConstPtr;
+      using Ptr = boost::shared_ptr<ConcaveHull<PointInT> >;
+      using ConstPtr = boost::shared_ptr<const ConcaveHull<PointInT> >;
 
       using PCLBase<PointInT>::input_;
       using PCLBase<PointInT>::indices_;
@@ -66,9 +66,9 @@ namespace pcl
     public:
       using MeshConstruction<PointInT>::reconstruct;
 
-      typedef pcl::PointCloud<PointInT> PointCloud;
-      typedef typename PointCloud::Ptr PointCloudPtr;
-      typedef typename PointCloud::ConstPtr PointCloudConstPtr;
+      using PointCloud = pcl::PointCloud<PointInT>;
+      using PointCloudPtr = typename PointCloud::Ptr;
+      using PointCloudConstPtr = typename PointCloud::ConstPtr;
 
       /** \brief Empty constructor. */
       ConcaveHull () : alpha_ (0), keep_information_ (false), voronoi_centers_ (), dim_(0)
@@ -76,7 +76,7 @@ namespace pcl
       };
       
       /** \brief Empty destructor */
-      virtual ~ConcaveHull () {}
+      ~ConcaveHull () {}
 
       /** \brief Compute a concave hull for all points given 
         *
@@ -164,7 +164,7 @@ namespace pcl
     protected:
       /** \brief Class get name method. */
       std::string
-      getClassName () const
+      getClassName () const override
       {
         return ("ConcaveHull");
       }
@@ -180,11 +180,11 @@ namespace pcl
       performReconstruction (PointCloud &points, 
                              std::vector<pcl::Vertices> &polygons);
 
-      virtual void
-      performReconstruction (PolygonMesh &output);
+      void
+      performReconstruction (PolygonMesh &output) override;
 
-      virtual void
-      performReconstruction (std::vector<pcl::Vertices> &polygons);
+      void
+      performReconstruction (std::vector<pcl::Vertices> &polygons) override;
 
       /** \brief The method accepts facets only if the distance from any vertex to the facet->center 
         * (center of the voronoi cell) is smaller than alpha 

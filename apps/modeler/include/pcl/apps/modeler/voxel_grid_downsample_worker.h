@@ -47,21 +47,21 @@ namespace pcl
     class VoxelGridDownampleWorker : public AbstractWorker 
     {
       public:
-        VoxelGridDownampleWorker(const QList<CloudMeshItem*>& cloud_mesh_items, QWidget* parent=0);
-        ~VoxelGridDownampleWorker(void);
+        VoxelGridDownampleWorker(const QList<CloudMeshItem*>& cloud_mesh_items, QWidget* parent=nullptr);
+        ~VoxelGridDownampleWorker();
 
       protected:
-        virtual std::string
-        getName () const {return ("Down Sample");}
+        std::string
+        getName () const override {return ("Down Sample");}
 
-        virtual void
-        initParameters(CloudMeshItem* cloud_mesh_item);
+        void
+        initParameters(CloudMeshItem* cloud_mesh_item) override;
 
-        virtual void
-        setupParameters();
+        void
+        setupParameters() override;
 
-        virtual void
-        processImpl(CloudMeshItem* cloud_mesh_item);
+        void
+        processImpl(CloudMeshItem* cloud_mesh_item) override;
 
       private:
         double x_min_, x_max_;

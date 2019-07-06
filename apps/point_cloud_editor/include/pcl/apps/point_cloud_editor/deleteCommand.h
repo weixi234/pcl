@@ -52,42 +52,24 @@ class DeleteCommand : public Command
     /// @param selection_ptr A shared pointer pointing to the selection object.
     /// @param cloud_ptr A shared pointer pointing to the cloud object.
     DeleteCommand (SelectionPtr selection_ptr, CloudPtr cloud_ptr);
-   
-    /// @brief Destructor
-    ~DeleteCommand ()
-    {
-    }
-    
-  protected:
-    /// @brief Removes the selected points and maintains a backup for undo.
-    void 
-    execute ();
-    
-    /// @brief Returns the deleted points to the cloud, Order is not preserved.
-    void 
-    undo ();
 
-  private:
-    /// @brief Default constructor - object is not default constructable
-    DeleteCommand ():  deleted_selection_(CloudPtr())
-    {
-      assert(false);
-    }
-    
     /// @brief Copy constructor - commands are non-copyable
-    DeleteCommand (const DeleteCommand& c)
-      : deleted_selection_(c.deleted_selection_)
-    {
-      assert(false);
-    }
+    DeleteCommand (const DeleteCommand& c) = delete;
 
     /// @brief Equal operator - commands are non-copyable
     DeleteCommand&
-    operator= (const DeleteCommand&)
-    {
-      assert(false); return (*this);
-    }
+    operator= (const DeleteCommand&) = delete;
 
+  protected:
+    /// @brief Removes the selected points and maintains a backup for undo.
+    void 
+    execute () override;
+    
+    /// @brief Returns the deleted points to the cloud, Order is not preserved.
+    void 
+    undo () override;
+
+  private:
     /// a pointer pointing to the cloud
     CloudPtr cloud_ptr_;
 

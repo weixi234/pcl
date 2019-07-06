@@ -38,22 +38,15 @@
 
 
 #include <boost/filesystem.hpp>
-#include <boost/thread/thread.hpp>
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
 #include <pcl/common/transforms.h>
-
-#include <pcl/kdtree/kdtree_flann.h>
-
 #include <pcl/features/normal_3d.h>
-
 #include <pcl/visualization/pcl_visualizer.h>
-
 #include <pcl/surface/texture_mapping.h>
-
 #include <pcl/io/vtk_lib_io.h>
 
 using namespace pcl;
@@ -75,7 +68,7 @@ saveOBJFile (const std::string &file_name,
   fs.open (file_name.c_str ());
 
   // Define material file
-  std::string mtl_file_name = file_name.substr (0, file_name.find_last_of (".")) + ".mtl";
+  std::string mtl_file_name = file_name.substr (0, file_name.find_last_of ('.')) + ".mtl";
   // Strip path for "mtllib" command
   std::string mtl_file_name_nopath = mtl_file_name;
   mtl_file_name_nopath.erase (0, mtl_file_name.find_last_of ('/') + 1);
@@ -110,10 +103,6 @@ saveOBJFile (const std::string &file_name,
     bool v_written = false;
     for (size_t d = 0; d < tex_mesh.cloud.fields.size (); ++d)
     {
-      int count = tex_mesh.cloud.fields[d].count;
-      if (count == 0)
-        count = 1;          // we simply cannot tolerate 0 counts (coming from older converter code)
-      int c = 0;
       // adding vertex
       if ((tex_mesh.cloud.fields[d].datatype == pcl::PCLPointField::FLOAT32) && (
                 tex_mesh.cloud.fields[d].name == "x" ||
@@ -127,7 +116,7 @@ saveOBJFile (const std::string &file_name,
             v_written = true;
         }
         float value;
-        memcpy (&value, &tex_mesh.cloud.data[i * point_size + tex_mesh.cloud.fields[d].offset + c * sizeof (float)], sizeof (float));
+        memcpy (&value, &tex_mesh.cloud.data[i * point_size + tex_mesh.cloud.fields[d].offset], sizeof (float));
         fs << value;
         if (++xyz == 3)
             break;
@@ -151,10 +140,6 @@ saveOBJFile (const std::string &file_name,
     bool v_written = false;
     for (size_t d = 0; d < tex_mesh.cloud.fields.size (); ++d)
     {
-      int count = tex_mesh.cloud.fields[d].count;
-      if (count == 0)
-      count = 1;          // we simply cannot tolerate 0 counts (coming from older converter code)
-      int c = 0;
       // adding vertex
       if ((tex_mesh.cloud.fields[d].datatype == pcl::PCLPointField::FLOAT32) && (
       tex_mesh.cloud.fields[d].name == "normal_x" ||
@@ -168,7 +153,7 @@ saveOBJFile (const std::string &file_name,
           v_written = true;
         }
         float value;
-        memcpy (&value, &tex_mesh.cloud.data[i * point_size + tex_mesh.cloud.fields[d].offset + c * sizeof (float)], sizeof (float));
+        memcpy (&value, &tex_mesh.cloud.data[i * point_size + tex_mesh.cloud.fields[d].offset], sizeof (float));
         fs << value;
         if (++xyz == 3)
           break;
@@ -186,15 +171,15 @@ saveOBJFile (const std::string &file_name,
 
   for (int m = 0; m < nr_meshes; ++m)
   {
-    if(tex_mesh.tex_coordinates.size() == 0)
+    if(tex_mesh.tex_coordinates.empty ())
       continue;
 
     PCL_INFO ("%d vertex textures in submesh %d\n", tex_mesh.tex_coordinates[m].size (), m);
     fs << "# " << tex_mesh.tex_coordinates[m].size() << " vertex textures in submesh " << m <<  std::endl;
-    for (size_t i = 0; i < tex_mesh.tex_coordinates[m].size (); ++i)
+    for (const auto &coordinate : tex_mesh.tex_coordinates[m])
     {
       fs << "vt ";
-      fs <<  tex_mesh.tex_coordinates[m][i][0] << " " << tex_mesh.tex_coordinates[m][i][1] << std::endl;
+      fs <<  coordinate[0] << " " << coordinate[1] << std::endl;
     }
   }
 
@@ -207,7 +192,7 @@ saveOBJFile (const std::string &file_name,
     if (m > 0) 
       f_idx += tex_mesh.tex_polygons[m-1].size ();
 
-    if(tex_mesh.tex_materials.size() !=0)
+    if(!tex_mesh.tex_materials.empty ())
     {
       fs << "# The material will be used for mesh " << m << std::endl;
       //TODO pbl here with multi texture and unseen faces
@@ -218,10 +203,9 @@ saveOBJFile (const std::string &file_name,
     {
       // Write faces with "f"
       fs << "f";
-      size_t j = 0;
       // There's one UV per vertex per face, i.e., the same vertex can have
       // different UV depending on the face.
-      for (j = 0; j < tex_mesh.tex_polygons[m][i].vertices.size (); ++j)
+      for (size_t j = 0; j < tex_mesh.tex_polygons[m][i].vertices.size (); ++j)
       {
         unsigned int idx = tex_mesh.tex_polygons[m][i].vertices[j] + 1;
         fs << " " << idx
@@ -243,7 +227,7 @@ saveOBJFile (const std::string &file_name,
   // Open file
   PCL_INFO ("Writing material files\n");
   //don't do it if no material to write
-  if(tex_mesh.tex_materials.size() ==0)
+  if(tex_mesh.tex_materials.empty ())
     return (0);
 
   std::ofstream m_fs;
@@ -280,7 +264,7 @@ void showCameras (pcl::texture_mapping::CameraVector cams, pcl::PointCloud<pcl::
   pcl::visualization::PCLVisualizer visu ("cameras");
 
   // add a visual for each camera at the correct pose
-  for(int i = 0 ; i < cams.size () ; ++i)
+  for(size_t i = 0 ; i < cams.size () ; ++i)
   {
     // read current camera
     pcl::TextureMapping<pcl::PointXYZ>::Camera cam = cams[i];
@@ -354,7 +338,7 @@ void showCameras (pcl::texture_mapping::CameraVector cams, pcl::PointCloud<pcl::
 std::ifstream& GotoLine(std::ifstream& file, unsigned int num)
 {
   file.seekg (std::ios::beg);
-  for(int i=0; i < num - 1; ++i)
+  for(unsigned int i=0; i < num - 1; ++i)
   {
     file.ignore (std::numeric_limits<std::streamsize>::max (),'\n');
   }
@@ -467,7 +451,7 @@ main (int argc, char** argv)
 
   // Create materials for each texture (and one extra for occluded faces)
   mesh.tex_materials.resize (my_cams.size () + 1);
-  for(int i = 0 ; i <= my_cams.size() ; ++i)
+  for(size_t i = 0 ; i <= my_cams.size() ; ++i)
   {
     pcl::TexMaterial mesh_material;
     mesh_material.tex_Ka.r = 0.2f;
@@ -506,7 +490,7 @@ main (int argc, char** argv)
   
   
   PCL_INFO ("Sorting faces by cameras done.\n");
-  for(int i = 0 ; i <= my_cams.size() ; ++i)
+  for(size_t i = 0 ; i <= my_cams.size() ; ++i)
   {
     PCL_INFO ("\tSub mesh %d contains %d faces and %d UV coordinates.\n", i, mesh.tex_polygons[i].size (), mesh.tex_coordinates[i].size ());
   }

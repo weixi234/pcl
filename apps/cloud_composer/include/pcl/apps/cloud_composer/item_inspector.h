@@ -37,10 +37,13 @@
 
 #pragma once
 
-#include <pcl/apps/cloud_composer/qt.h>
+#include <QTabWidget>
+
 #include <pcl/apps/cloud_composer/project_model.h>
 #include <pcl/apps/cloud_composer/properties_model.h>
+
 class QItemSelectionModel;
+class QTreeView;
 
 namespace pcl
 {
@@ -54,8 +57,8 @@ namespace pcl
     {
       Q_OBJECT
       public:
-        ItemInspector (QWidget* parent = 0);
-        virtual ~ItemInspector();
+        ItemInspector (QWidget* parent = nullptr);
+        ~ItemInspector();
       
       public Q_SLOTS:
         void 

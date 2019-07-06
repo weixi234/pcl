@@ -65,8 +65,8 @@ namespace pcl
   class SHOTLocalReferenceFrameEstimation : public Feature<PointInT, PointOutT>
   {
     public:
-      typedef boost::shared_ptr<SHOTLocalReferenceFrameEstimation<PointInT, PointOutT> > Ptr;
-      typedef boost::shared_ptr<const SHOTLocalReferenceFrameEstimation<PointInT, PointOutT> > ConstPtr;
+      using Ptr = boost::shared_ptr<SHOTLocalReferenceFrameEstimation<PointInT, PointOutT> >;
+      using ConstPtr = boost::shared_ptr<const SHOTLocalReferenceFrameEstimation<PointInT, PointOutT> >;
       /** \brief Constructor */
       SHOTLocalReferenceFrameEstimation ()
       {
@@ -74,7 +74,7 @@ namespace pcl
       }
       
       /** \brief Empty destructor */
-      virtual ~SHOTLocalReferenceFrameEstimation () {}
+      ~SHOTLocalReferenceFrameEstimation () {}
 
     protected:
       using Feature<PointInT, PointOutT>::feature_name_;
@@ -86,8 +86,8 @@ namespace pcl
       using Feature<PointInT, PointOutT>::tree_;
       using Feature<PointInT, PointOutT>::search_parameter_;
 
-      typedef typename Feature<PointInT, PointOutT>::PointCloudIn PointCloudIn;
-      typedef typename Feature<PointInT, PointOutT>::PointCloudOut PointCloudOut;
+      using PointCloudIn = typename Feature<PointInT, PointOutT>::PointCloudIn;
+      using PointCloudOut = typename Feature<PointInT, PointOutT>::PointCloudOut;
 
       /** \brief Computes disambiguated local RF for a point index
         * \param[in] index the index
@@ -99,8 +99,8 @@ namespace pcl
       /** \brief Feature estimation method.
         * \param[out] output the resultant features
         */
-      virtual void
-      computeFeature (PointCloudOut &output);
+      void
+      computeFeature (PointCloudOut &output) override;
   };
 }
 

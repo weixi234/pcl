@@ -54,17 +54,16 @@ namespace pcl
   class GeometricConsistencyGrouping : public CorrespondenceGrouping<PointModelT, PointSceneT>
   {
     public:
-      typedef pcl::PointCloud<PointModelT> PointCloud;
-      typedef typename PointCloud::Ptr PointCloudPtr;
-      typedef typename PointCloud::ConstPtr PointCloudConstPtr;
+      using PointCloud = pcl::PointCloud<PointModelT>;
+      using PointCloudPtr = typename PointCloud::Ptr;
+      using PointCloudConstPtr = typename PointCloud::ConstPtr;
 
-      typedef typename pcl::CorrespondenceGrouping<PointModelT, PointSceneT>::SceneCloudConstPtr SceneCloudConstPtr;
+      using SceneCloudConstPtr = typename pcl::CorrespondenceGrouping<PointModelT, PointSceneT>::SceneCloudConstPtr;
 
       /** \brief Constructor */
       GeometricConsistencyGrouping () 
         : gc_threshold_ (3)
         , gc_size_ (1.0)
-        , found_transformations_ ()
       {}
 
       
@@ -146,7 +145,7 @@ namespace pcl
         * \return true if the clustering had been successful or false if errors have occurred.
         */ 
       void
-      clusterCorrespondences (std::vector<Correspondences> &model_instances);
+      clusterCorrespondences (std::vector<Correspondences> &model_instances) override;
   };
 }
 

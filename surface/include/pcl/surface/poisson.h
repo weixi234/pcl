@@ -37,6 +37,7 @@
 
 #pragma once
 
+#include <pcl/pcl_macros.h>
 #include <pcl/surface/reconstruction.h>
 
 namespace pcl
@@ -59,16 +60,16 @@ namespace pcl
   class Poisson : public SurfaceReconstruction<PointNT>
   {
     public:
-      typedef boost::shared_ptr<Poisson<PointNT> > Ptr;
-      typedef boost::shared_ptr<const Poisson<PointNT> > ConstPtr;
+      using Ptr = boost::shared_ptr<Poisson<PointNT> >;
+      using ConstPtr = boost::shared_ptr<const Poisson<PointNT> >;
 
       using SurfaceReconstruction<PointNT>::input_;
       using SurfaceReconstruction<PointNT>::tree_;
 
-      typedef typename pcl::PointCloud<PointNT>::Ptr PointCloudPtr;
+      using PointCloudPtr = typename pcl::PointCloud<PointNT>::Ptr;
 
-      typedef typename pcl::KdTree<PointNT> KdTree;
-      typedef typename pcl::KdTree<PointNT>::Ptr KdTreePtr;
+      using KdTree = pcl::KdTree<PointNT>;
+      using KdTreePtr = typename KdTree::Ptr;
 
       /** \brief Constructor that sets all the parameters to working default values. */
       Poisson ();
@@ -80,7 +81,7 @@ namespace pcl
         * \param[out] output the resultant polygonal mesh
         */
       void
-      performReconstruction (pcl::PolygonMesh &output);
+      performReconstruction (pcl::PolygonMesh &output) override;
 
       /** \brief Create the surface.
         * \param[out] points the vertex positions of the resulting mesh
@@ -88,7 +89,7 @@ namespace pcl
         */
       void
       performReconstruction (pcl::PointCloud<PointNT> &points,
-                             std::vector<pcl::Vertices> &polygons);
+                             std::vector<pcl::Vertices> &polygons) override;
 
       /** \brief Set the maximum depth of the tree that will be used for surface reconstruction.
         * \note Running at depth d corresponds to solving on a voxel grid whose resolution is no larger than
@@ -217,7 +218,7 @@ namespace pcl
     protected:
       /** \brief Class get name method. */
       std::string
-      getClassName () const { return ("Poisson"); }
+      getClassName () const override { return ("Poisson"); }
 
     private:
       int depth_;
@@ -248,7 +249,7 @@ namespace pcl
                float &scale);
 
     public:
-      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+      PCL_MAKE_ALIGNED_OPERATOR_NEW
   };
 }
 

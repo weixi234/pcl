@@ -46,7 +46,7 @@ namespace pcl
 {
   /** \brief Implementation of a fast bilateral filter for smoothing depth information in organized point clouds
    *  Based on the following paper:
-   *    * Sylvain Paris and Frédo Durand
+   *    * Sylvain Paris and Fredo Durand
    *      "A Fast Approximation of the Bilateral Filter using a Signal Processing Approach"
    *       European Conference on Computer Vision (ECCV'06)
    *
@@ -57,12 +57,12 @@ namespace pcl
   {
     protected:
       using Filter<PointT>::input_;
-      typedef typename Filter<PointT>::PointCloud PointCloud;
+      using PointCloud = typename Filter<PointT>::PointCloud;
 
     public:
     
-      typedef boost::shared_ptr< FastBilateralFilter<PointT> > Ptr;
-      typedef boost::shared_ptr< const FastBilateralFilter<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<FastBilateralFilter<PointT> >;
+      using ConstPtr = boost::shared_ptr<const FastBilateralFilter<PointT> >;
 
       /** \brief Empty constructor. */
       FastBilateralFilter ()
@@ -72,7 +72,7 @@ namespace pcl
       { }
       
       /** \brief Empty destructor */
-      virtual ~FastBilateralFilter () {}
+      ~FastBilateralFilter () {}
 
       /** \brief Set the standard deviation of the Gaussian used by the bilateral filter for
         * the spatial neighborhood/window.
@@ -104,8 +104,8 @@ namespace pcl
       /** \brief Filter the input data and store the results into output.
         * \param[out] output the resultant point cloud
         */
-      virtual void
-      applyFilter (PointCloud &output);
+      void
+      applyFilter (PointCloud &output) override;
 
     protected:
       float sigma_s_;

@@ -75,10 +75,10 @@ namespace pcl
       using Feature<PointInT, PointOutT>::searchForNeighbors;
       using FeatureWithLocalReferenceFrames<PointInT, PointRFT>::frames_;
 
-      typedef typename Feature<PointInT, PointOutT>::PointCloudOut PointCloudOut;
-      typedef typename Feature<PointInT, PointOutT>::PointCloudIn PointCloudIn;
-      typedef typename boost::shared_ptr<UniqueShapeContext<PointInT, PointOutT, PointRFT> > Ptr;
-      typedef typename boost::shared_ptr<const UniqueShapeContext<PointInT, PointOutT, PointRFT> > ConstPtr;
+      using PointCloudOut = typename Feature<PointInT, PointOutT>::PointCloudOut;
+      using PointCloudIn = typename Feature<PointInT, PointOutT>::PointCloudIn;
+      using Ptr = boost::shared_ptr<UniqueShapeContext<PointInT, PointOutT, PointRFT> >;
+      using ConstPtr = boost::shared_ptr<const UniqueShapeContext<PointInT, PointOutT, PointRFT> >;
 
 
       /** \brief Constructor. */
@@ -91,7 +91,7 @@ namespace pcl
         search_radius_ = 2.0;
       }
 
-      virtual ~UniqueShapeContext() { }
+      ~UniqueShapeContext() { }
 
       /** \return The number of bins along the azimuth. */
       inline size_t
@@ -145,14 +145,14 @@ namespace pcl
       computePointDescriptor (size_t index, std::vector<float> &desc);
 
       /** \brief Initialize computation by allocating all the intervals and the volume lookup table. */
-      virtual bool
-      initCompute ();
+      bool
+      initCompute () override;
 
       /** \brief The actual feature computation.
         * \param[out] output the resultant features
         */
-      virtual void
-      computeFeature (PointCloudOut &output);
+      void
+      computeFeature (PointCloudOut &output) override;
 
       /** \brief values of the radii interval. */
       std::vector<float> radii_interval_;

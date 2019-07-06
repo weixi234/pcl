@@ -51,8 +51,8 @@ namespace pcl
   {
     public:
 
-      typedef boost::shared_ptr< VoxelGridLabel > Ptr;
-      typedef boost::shared_ptr< const VoxelGridLabel > ConstPtr;
+      using Ptr = boost::shared_ptr<VoxelGridLabel>;
+      using ConstPtr = boost::shared_ptr<const VoxelGridLabel>;
 
 
       /** \brief Constructor.
@@ -66,7 +66,7 @@ namespace pcl
         * \param[out] output cloud containing centroids of voxels containing a sufficient number of points
         */
       void 
-      applyFilter (PointCloud &output);
+      applyFilter (PointCloud &output) override;
 
   };
 }

@@ -36,7 +36,7 @@
 
 #pragma once
 
-#include <pcl/apps/modeler/qt.h>
+#include <QDockWidget>
 
 namespace pcl
 {
@@ -45,15 +45,15 @@ namespace pcl
     class DockWidget : public QDockWidget
     {
       public:
-        explicit DockWidget(const QString &title, QWidget *parent = 0, Qt::WindowFlags flags = 0); 
-        explicit DockWidget(QWidget *parent = 0, Qt::WindowFlags flags = 0); 
+        explicit DockWidget(const QString &title, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags()); 
+        explicit DockWidget(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags()); 
         ~DockWidget();
 
         void
         setFocusBasedStyle(bool focused);
       protected:
-        virtual void
-        focusInEvent ( QFocusEvent * event );
+        void
+        focusInEvent ( QFocusEvent * event ) override;
 
       private:
     };

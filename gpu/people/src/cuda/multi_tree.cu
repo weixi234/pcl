@@ -56,7 +56,7 @@ using pcl::gpu::people::trees::focal;
 using pcl::gpu::people::trees::NUM_LABELS;
 
 using namespace std;
-typedef unsigned int uint;
+using uint = unsigned int;
 
 #ifdef __CDT_PARSER__ // This is an eclipse specific hack, does nothing to the code
 #define __global__
@@ -164,7 +164,7 @@ namespace pcl
 
       KernelCUDA_runTree<<< grid, block >>>( focal, treeHeight, numNodes, nodes, leaves, labels);
       cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );      
+      cudaSafeCall( cudaDeviceSynchronize() );      
     }
 
     void CUDA_runMultiTreePass ( int   FGThresh,
@@ -198,7 +198,7 @@ namespace pcl
       }
 
       cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );      
+      cudaSafeCall( cudaDeviceSynchronize() );      
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -323,7 +323,7 @@ namespace pcl
       KernelCUDA_MultiTreeMerge<<< grid, block >>>( numTrees, labels );
 
       cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );            
+      cudaSafeCall( cudaDeviceSynchronize() );            
     }
 
     /** \brief This will merge the votes from the different trees into one final vote, including probabilistic's */
@@ -348,7 +348,7 @@ namespace pcl
       KernelCUDA_MultiTreeCreateProb<<< grid, block >>>( numTrees, probabilities);
 
       cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );            
+      cudaSafeCall( cudaDeviceSynchronize() );            
     }
   }
 }

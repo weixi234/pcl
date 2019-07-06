@@ -45,18 +45,6 @@
 #include <pcl/pcl_macros.h>
 #include <pcl/console/print.h>
 
-
-/** \brief Helper function to calculate the binary logarithm
- * \param n_arg: some value
- * \return binary logarithm (log2) of argument n_arg
- */
-__inline float
-Log2 (float n_arg)
-{
-  return std::log (n_arg) / float (M_LN2);
-}
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 template <typename PointFeature> float
 pcl::PyramidFeatureHistogram<PointFeature>::comparePyramidFeatureHistograms (const PyramidFeatureHistogramPtr &pyramid_a,
@@ -129,7 +117,6 @@ pcl::PyramidFeatureHistogram<PointFeature>::comparePyramidFeatureHistograms (con
 template <typename PointFeature>
 pcl::PyramidFeatureHistogram<PointFeature>::PyramidFeatureHistogram () :
   nr_dimensions (0), nr_levels (0), nr_features (0),
-  dimension_range_input_ (), dimension_range_target_ (),
   feature_representation_ (new DefaultPointRepresentation<PointFeature>),
   is_computed_ (false),
   hist_levels ()
@@ -159,13 +146,13 @@ pcl::PyramidFeatureHistogram<PointFeature>::initializeHistogram ()
     return false;
   }
 
-  if (dimension_range_input_.size () == 0)
+  if (dimension_range_input_.empty ())
   {
     PCL_ERROR ("[pcl::PyramidFeatureHistogram::initializeHistogram] Input dimension range was not set\n");
     return false;
   }
 
-  if (dimension_range_target_.size () == 0)
+  if (dimension_range_target_.empty ())
   {
     PCL_ERROR ("[pcl::PyramidFeatureHistogram::initializeHistogram] Target dimension range was not set\n");
     return false;
@@ -188,7 +175,7 @@ pcl::PyramidFeatureHistogram<PointFeature>::initializeHistogram ()
     D += aux * aux;
   }
   D = std::sqrt (D);
-  nr_levels = static_cast<size_t> (ceilf (Log2 (D)));
+  nr_levels = static_cast<size_t> (ceilf (std::log2(D)));
   PCL_DEBUG ("[pcl::PyramidFeatureHistogram::initializeHistogram] Pyramid will have %u levels with a hyper-parallelepiped diagonal size of %f\n", nr_levels, D);
 
 
@@ -262,7 +249,7 @@ pcl::PyramidFeatureHistogram<PointFeature>::at (std::vector<float> &feature,
 
   std::vector<size_t> access;
   for (size_t dim_i = 0; dim_i < nr_dimensions; ++dim_i)
-    access.push_back (static_cast<size_t> (floor ((feature[dim_i] - dimension_range_target_[dim_i].first) / hist_levels[level].bin_step[dim_i])));
+    access.push_back (static_cast<size_t> (std::floor ((feature[dim_i] - dimension_range_target_[dim_i].first) / hist_levels[level].bin_step[dim_i])));
 
   return at (access, level);
 }

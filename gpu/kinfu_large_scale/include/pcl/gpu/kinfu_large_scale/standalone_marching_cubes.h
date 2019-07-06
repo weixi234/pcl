@@ -44,8 +44,8 @@
 #include <pcl/io/ply_io.h>
 #include <pcl/io/vtk_io.h>
 #include <pcl/point_types.h>
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstdio>
+#include <cstdarg>
 #include <pcl/pcl_macros.h>
 
 //Marching cubes includes
@@ -77,9 +77,9 @@ namespace pcl
       class StandaloneMarchingCubes
       {
       public:
-          typedef typename pcl::PointCloud<PointT> PointCloud;
-          typedef typename pcl::PointCloud<PointT>::Ptr PointCloudPtr;
-          typedef boost::shared_ptr<pcl::PolygonMesh> MeshPtr;
+          using PointCloud = pcl::PointCloud<PointT>;
+          using PointCloudPtr = typename PointCloud::Ptr;
+          using MeshPtr = boost::shared_ptr<pcl::PolygonMesh>;
 
       /** \brief Constructor        
         */

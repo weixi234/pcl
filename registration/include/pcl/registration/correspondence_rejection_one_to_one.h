@@ -62,8 +62,8 @@ namespace pcl
       using CorrespondenceRejector::getClassName;
 
       public:
-        typedef boost::shared_ptr<CorrespondenceRejectorOneToOne> Ptr;
-        typedef boost::shared_ptr<const CorrespondenceRejectorOneToOne> ConstPtr;
+        using Ptr = boost::shared_ptr<CorrespondenceRejectorOneToOne>;
+        using ConstPtr = boost::shared_ptr<const CorrespondenceRejectorOneToOne>;
 
         /** \brief Empty constructor. */
         CorrespondenceRejectorOneToOne ()
@@ -77,14 +77,14 @@ namespace pcl
           */
         void 
         getRemainingCorrespondences (const pcl::Correspondences& original_correspondences, 
-                                     pcl::Correspondences& remaining_correspondences);
+                                     pcl::Correspondences& remaining_correspondences) override;
 
       protected:
         /** \brief Apply the rejection algorithm.
           * \param[out] correspondences the set of resultant correspondences.
           */
         inline void 
-        applyRejection (pcl::Correspondences &correspondences)
+        applyRejection (pcl::Correspondences &correspondences) override
         {
           getRemainingCorrespondences (*input_correspondences_, correspondences);
         }

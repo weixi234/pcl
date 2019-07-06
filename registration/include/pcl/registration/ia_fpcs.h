@@ -77,22 +77,22 @@ namespace pcl
     {
     public:
       /** \cond */
-      typedef boost::shared_ptr <FPCSInitialAlignment <PointSource, PointTarget, NormalT, Scalar> > Ptr;
-      typedef boost::shared_ptr <const FPCSInitialAlignment <PointSource, PointTarget, NormalT, Scalar> > ConstPtr;
+      using Ptr = boost::shared_ptr <FPCSInitialAlignment <PointSource, PointTarget, NormalT, Scalar> >;
+      using ConstPtr = boost::shared_ptr <const FPCSInitialAlignment <PointSource, PointTarget, NormalT, Scalar> >;
 
-      typedef pcl::search::KdTree<PointSource> KdTreeReciprocal;
-      typedef typename KdTreeReciprocal::Ptr KdTreeReciprocalPtr;
+      using KdTreeReciprocal = pcl::search::KdTree<PointSource>;
+      using KdTreeReciprocalPtr = typename KdTreeReciprocal::Ptr;
 
-      typedef pcl::PointCloud <PointTarget> PointCloudTarget;
-      typedef pcl::PointCloud <PointSource> PointCloudSource;
-      typedef typename PointCloudSource::Ptr PointCloudSourcePtr;
-      typedef typename PointCloudSource::iterator PointCloudSourceIterator;      
+      using PointCloudTarget = pcl::PointCloud<PointTarget>;
+      using PointCloudSource = pcl::PointCloud<PointSource>;
+      using PointCloudSourcePtr = typename PointCloudSource::Ptr;
+      using PointCloudSourceIterator = typename PointCloudSource::iterator;      
 
-      typedef pcl::PointCloud <NormalT> Normals;
-      typedef typename Normals::ConstPtr NormalsConstPtr;
+      using Normals = pcl::PointCloud<NormalT>;
+      using NormalsConstPtr = typename Normals::ConstPtr;
 
-      typedef pcl::registration::MatchingCandidate MatchingCandidate;
-      typedef pcl::registration::MatchingCandidates MatchingCandidates;
+      using MatchingCandidate = pcl::registration::MatchingCandidate;
+      using MatchingCandidates = pcl::registration::MatchingCandidates;
       /** \endcond */
 
 
@@ -103,7 +103,7 @@ namespace pcl
       FPCSInitialAlignment ();
 
       /** \brief Destructor. */
-      virtual ~FPCSInitialAlignment ()
+      ~FPCSInitialAlignment ()
       {};
 
 
@@ -308,8 +308,8 @@ namespace pcl
         * \param output the transformed input point cloud dataset using the rigid transformation found
         * \param guess The computed transforamtion
         */
-      virtual void
-      computeTransformation (PointCloudSource &output, const Eigen::Matrix4f& guess);
+      void
+      computeTransformation (PointCloudSource &output, const Eigen::Matrix4f& guess) override;
 
 
       /** \brief Internal computation initialization. */

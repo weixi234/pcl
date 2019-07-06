@@ -64,15 +64,15 @@ namespace pcl
   class OrganizedFastMesh : public MeshConstruction<PointInT>
   {
     public:
-      typedef boost::shared_ptr<OrganizedFastMesh<PointInT> > Ptr;
-      typedef boost::shared_ptr<const OrganizedFastMesh<PointInT> > ConstPtr;
+      using Ptr = boost::shared_ptr<OrganizedFastMesh<PointInT> >;
+      using ConstPtr = boost::shared_ptr<const OrganizedFastMesh<PointInT> >;
 
       using MeshConstruction<PointInT>::input_;
       using MeshConstruction<PointInT>::check_tree_;
 
-      typedef typename pcl::PointCloud<PointInT>::Ptr PointCloudPtr;
+      using PointCloudPtr = typename pcl::PointCloud<PointInT>::Ptr;
 
-      typedef std::vector<pcl::Vertices> Polygons;
+      using Polygons = std::vector<pcl::Vertices>;
 
       enum TriangulationType
       {
@@ -103,7 +103,7 @@ namespace pcl
       };
 
       /** \brief Destructor. */
-      virtual ~OrganizedFastMesh () {};
+      ~OrganizedFastMesh () {};
 
       /** \brief Set a maximum edge length. 
         * Using not only the scalar \a a, but also \a b and \a c, allows for using a distance threshold in the form of:
@@ -278,8 +278,8 @@ namespace pcl
       /** \brief Create the surface.
         * \param[out] polygons the resultant polygons, as a set of vertices. The Vertices structure contains an array of point indices.
         */
-      virtual void
-      performReconstruction (std::vector<pcl::Vertices> &polygons);
+      void
+      performReconstruction (std::vector<pcl::Vertices> &polygons) override;
 
       /** \brief Create the surface.
         *
@@ -289,7 +289,7 @@ namespace pcl
         * \param[out] output the resultant polygonal mesh
         */
       void
-      performReconstruction (pcl::PolygonMesh &output);
+      performReconstruction (pcl::PolygonMesh &output) override;
 
       /** \brief Add a new triangle to the current polygon mesh
         * \param[in] a index of the first vertex
@@ -362,9 +362,9 @@ namespace pcl
         if (cos_angle_tolerance_ > 0)
         {
           float cos_angle = dir_a.dot (dir_b) / (distance_to_points*distance_between_points);
-          if (cos_angle != cos_angle)
+          if (std::isnan(cos_angle))
             cos_angle = 1.0f;
-          bool check_angle = fabs (cos_angle) >= cos_angle_tolerance_;
+          bool check_angle = std::fabs (cos_angle) >= cos_angle_tolerance_;
 
           bool check_distance = true;
           if (check_angle && (distance_tolerance_ > 0))
@@ -388,9 +388,9 @@ namespace pcl
         {
           float dist = (use_depth_as_distance_ ? std::max(point_a.z, point_b.z) : distance_to_points);
           float dist_thresh = max_edge_length_a_;
-          if (fabs(max_edge_length_b_) > std::numeric_limits<float>::min())
+          if (std::fabs(max_edge_length_b_) > std::numeric_limits<float>::min())
             dist_thresh += max_edge_length_b_ * dist;
-          if (fabs(max_edge_length_c_) > std::numeric_limits<float>::min())
+          if (std::fabs(max_edge_length_c_) > std::numeric_limits<float>::min())
             dist_thresh += max_edge_length_c_ * dist * dist;
           valid = (distance_between_points <= dist_thresh);
         }

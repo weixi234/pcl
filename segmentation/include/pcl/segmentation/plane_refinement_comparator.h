@@ -54,19 +54,19 @@ namespace pcl
   class PlaneRefinementComparator: public PlaneCoefficientComparator<PointT, PointNT>
   {
     public:
-      typedef typename Comparator<PointT>::PointCloud PointCloud;
-      typedef typename Comparator<PointT>::PointCloudConstPtr PointCloudConstPtr;
+      using PointCloud = typename Comparator<PointT>::PointCloud;
+      using PointCloudConstPtr = typename Comparator<PointT>::PointCloudConstPtr;
       
-      typedef typename pcl::PointCloud<PointNT> PointCloudN;
-      typedef typename PointCloudN::Ptr PointCloudNPtr;
-      typedef typename PointCloudN::ConstPtr PointCloudNConstPtr;
+      using PointCloudN = pcl::PointCloud<PointNT>;
+      using PointCloudNPtr = typename PointCloudN::Ptr;
+      using PointCloudNConstPtr = typename PointCloudN::ConstPtr;
 
-      typedef typename pcl::PointCloud<PointLT> PointCloudL;
-      typedef typename PointCloudL::Ptr PointCloudLPtr;
-      typedef typename PointCloudL::ConstPtr PointCloudLConstPtr;
+      using PointCloudL = pcl::PointCloud<PointLT>;
+      using PointCloudLPtr = typename PointCloudL::Ptr;
+      using PointCloudLConstPtr = typename PointCloudL::ConstPtr;
 
-      typedef boost::shared_ptr<PlaneRefinementComparator<PointT, PointNT, PointLT> > Ptr;
-      typedef boost::shared_ptr<const PlaneRefinementComparator<PointT, PointNT, PointLT> > ConstPtr;
+      using Ptr = boost::shared_ptr<PlaneRefinementComparator<PointT, PointNT, PointLT> >;
+      using ConstPtr = boost::shared_ptr<const PlaneRefinementComparator<PointT, PointNT, PointLT> >;
 
       using pcl::PlaneCoefficientComparator<PointT, PointNT>::input_;
       using pcl::PlaneCoefficientComparator<PointT, PointNT>::normals_;
@@ -76,10 +76,7 @@ namespace pcl
 
       /** \brief Empty constructor for PlaneCoefficientComparator. */
      PlaneRefinementComparator ()
-        : models_ ()
-        , labels_ ()
-        , refine_labels_ ()
-        , label_to_model_ ()
+        : labels_ ()
         , depth_dependent_ (false)
       {
       }
@@ -93,13 +90,12 @@ namespace pcl
         : models_ (models)
         , labels_ ()
         , refine_labels_ (refine_labels)
-        , label_to_model_ ()
         , depth_dependent_ (false)
       {
       }
 
       /** \brief Destructor for PlaneCoefficientComparator. */
-      virtual
+      
       ~PlaneRefinementComparator ()
       {
       }
@@ -178,8 +174,8 @@ namespace pcl
         * \param[in] idx1 The index of the first point.
         * \param[in] idx2 The index of the second point.
         */
-      virtual bool
-      compare (int idx1, int idx2) const
+      bool
+      compare (int idx1, int idx2) const override
       {
         int current_label = labels_->points[idx1].label;
         int next_label = labels_->points[idx2].label;
@@ -190,7 +186,7 @@ namespace pcl
         const pcl::ModelCoefficients& model_coeff = (*models_)[(*label_to_model_)[current_label]];
         
         PointT pt = input_->points[idx2];
-        double ptp_dist = fabs (model_coeff.values[0] * pt.x + 
+        double ptp_dist = std::fabs (model_coeff.values[0] * pt.x + 
                                 model_coeff.values[1] * pt.y + 
                                 model_coeff.values[2] * pt.z +
                                 model_coeff.values[3]);

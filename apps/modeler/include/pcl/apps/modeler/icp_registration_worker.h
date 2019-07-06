@@ -49,21 +49,21 @@ namespace pcl
     class ICPRegistrationWorker : public AbstractWorker 
     {
       public:
-        ICPRegistrationWorker(CloudMesh::PointCloudPtr cloud, const QList<CloudMeshItem*>& cloud_mesh_items, QWidget* parent=0);
-        ~ICPRegistrationWorker(void);
+        ICPRegistrationWorker(CloudMesh::PointCloudPtr cloud, const QList<CloudMeshItem*>& cloud_mesh_items, QWidget* parent=nullptr);
+        ~ICPRegistrationWorker();
 
       protected:
-        virtual std::string
-        getName () const {return ("Normal Estimation");}
+        std::string
+        getName () const override {return ("Normal Estimation");}
 
-        virtual void
-        initParameters(CloudMeshItem* cloud_mesh_item);
+        void
+        initParameters(CloudMeshItem* cloud_mesh_item) override;
 
-        virtual void
-        setupParameters();
+        void
+        setupParameters() override;
 
-        virtual void
-        processImpl(CloudMeshItem* cloud_mesh_item);
+        void
+        processImpl(CloudMeshItem* cloud_mesh_item) override;
 
       private:
         CloudMesh::PointCloudPtr    cloud_;

@@ -43,11 +43,13 @@
 #include <pcl/io/pcd_io.h>
 
 #include <pcl/apps/cloud_composer/commands.h>
-#include <pcl/apps/cloud_composer/qt.h>
 #include <pcl/apps/cloud_composer/point_selectors/selection_event.h> 
 #include <pcl/apps/cloud_composer/point_selectors/manipulation_event.h>
 #include <pcl/apps/cloud_composer/point_selectors/interactor_style_switch.h>
 
+#include <QDir>
+
+class QItemSelection;
 class QItemSelectionModel;
 
 namespace pcl
@@ -66,11 +68,11 @@ namespace pcl
         Q_OBJECT
 
       public:
-        ProjectModel (QObject *parent = 0);
+        ProjectModel (QObject *parent = nullptr);
         ProjectModel (const ProjectModel& to_copy);
-        virtual ~ProjectModel ();
+        ~ProjectModel ();
         
-        ProjectModel (QString project_name, QObject *parent = 0);
+        ProjectModel (QString project_name, QObject *parent = nullptr);
         
         inline const QString
         getName () { return horizontalHeaderItem (0)->text (); }
@@ -154,7 +156,7 @@ namespace pcl
         
         /** \brief Selects all items in the model */
         void 
-        selectAllItems (QStandardItem* item = 0 );
+        selectAllItems (QStandardItem* item = nullptr );
       Q_SIGNALS:
         void
         enqueueNewAction (AbstractTool* tool, ConstItemList data);

@@ -38,8 +38,8 @@
 #pragma once
 
 #include <pcl/filters/filter_indices.h>
-#include <time.h>
-#include <limits.h>
+#include <ctime>
+#include <climits>
 
 namespace pcl
 {
@@ -64,20 +64,20 @@ namespace pcl
     using FilterIndices<PointT>::extract_removed_indices_;
     using FilterIndices<PointT>::removed_indices_;
 
-    typedef typename FilterIndices<PointT>::PointCloud PointCloud;
-    typedef typename PointCloud::Ptr PointCloudPtr;
-    typedef typename PointCloud::ConstPtr PointCloudConstPtr;
+    using PointCloud = typename FilterIndices<PointT>::PointCloud;
+    using PointCloudPtr = typename PointCloud::Ptr;
+    using PointCloudConstPtr = typename PointCloud::ConstPtr;
 
     public:
 
-      typedef boost::shared_ptr< RandomSample<PointT> > Ptr;
-      typedef boost::shared_ptr< const RandomSample<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<RandomSample<PointT> >;
+      using ConstPtr = boost::shared_ptr<const RandomSample<PointT> >;
 
       /** \brief Empty constructor. */
       RandomSample (bool extract_removed_indices = false) : 
         FilterIndices<PointT> (extract_removed_indices),
         sample_ (UINT_MAX), 
-        seed_ (static_cast<unsigned int> (time (NULL)))
+        seed_ (static_cast<unsigned int> (time (nullptr)))
       {
         filter_name_ = "RandomSample";
       }
@@ -127,13 +127,13 @@ namespace pcl
         * \param output the resultant point cloud
         */
       void
-      applyFilter (PointCloud &output);
+      applyFilter (PointCloud &output) override;
 
       /** \brief Sample of point indices
         * \param indices the resultant point cloud indices
         */
       void
-      applyFilter (std::vector<int> &indices);
+      applyFilter (std::vector<int> &indices) override;
 
       /** \brief Return a random number fast using a LCG (Linear Congruential Generator) algorithm.
         * See http://software.intel.com/en-us/articles/fast-random-number-generator-on-the-intel-pentiumr-4-processor/ for more information.
@@ -156,17 +156,17 @@ namespace pcl
     using FilterIndices<pcl::PCLPointCloud2>::filter_name_;
     using FilterIndices<pcl::PCLPointCloud2>::getClassName;
 
-    typedef pcl::PCLPointCloud2 PCLPointCloud2;
-    typedef PCLPointCloud2::Ptr PCLPointCloud2Ptr;
-    typedef PCLPointCloud2::ConstPtr PCLPointCloud2ConstPtr;
+    using PCLPointCloud2 = pcl::PCLPointCloud2;
+    using PCLPointCloud2Ptr = PCLPointCloud2::Ptr;
+    using PCLPointCloud2ConstPtr = PCLPointCloud2::ConstPtr;
 
     public:
   
-      typedef boost::shared_ptr<RandomSample<pcl::PCLPointCloud2> > Ptr;
-      typedef boost::shared_ptr<const RandomSample<pcl::PCLPointCloud2> > ConstPtr;
+      using Ptr = boost::shared_ptr<RandomSample<pcl::PCLPointCloud2> >;
+      using ConstPtr = boost::shared_ptr<const RandomSample<pcl::PCLPointCloud2> >;
   
       /** \brief Empty constructor. */
-      RandomSample () : sample_ (UINT_MAX), seed_ (static_cast<unsigned int> (time (NULL)))
+      RandomSample () : sample_ (UINT_MAX), seed_ (static_cast<unsigned int> (time (nullptr)))
       {
         filter_name_ = "RandomSample";
       }
@@ -216,13 +216,13 @@ namespace pcl
         * \param output the resultant point cloud
         */
       void
-      applyFilter (PCLPointCloud2 &output);
+      applyFilter (PCLPointCloud2 &output) override;
 
       /** \brief Sample of point indices
         * \param indices the resultant point cloud indices
         */
       void
-      applyFilter (std::vector<int> &indices);
+      applyFilter (std::vector<int> &indices) override;
 
       /** \brief Return a random number fast using a LCG (Linear Congruential Generator) algorithm.
         * See http://software.intel.com/en-us/articles/fast-random-number-generator-on-the-intel-pentiumr-4-processor/ for more information.

@@ -58,13 +58,11 @@ namespace pcl
     class CorrespondenceRejector
     {
       public:
-        typedef boost::shared_ptr<CorrespondenceRejector> Ptr;
-        typedef boost::shared_ptr<const CorrespondenceRejector> ConstPtr;
+        using Ptr = boost::shared_ptr<CorrespondenceRejector>;
+        using ConstPtr = boost::shared_ptr<const CorrespondenceRejector>;
 
         /** \brief Empty constructor. */
         CorrespondenceRejector () 
-          : rejection_name_ ()
-          , input_correspondences_ () 
         {}
 
         /** \brief Empty destructor. */
@@ -214,15 +212,15 @@ namespace pcl
     template <typename PointT, typename NormalT = pcl::PointNormal>
     class DataContainer : public DataContainerInterface
     {
-      typedef pcl::PointCloud<PointT> PointCloud;
-      typedef typename PointCloud::Ptr PointCloudPtr;
-      typedef typename PointCloud::ConstPtr PointCloudConstPtr;
+      using PointCloud = pcl::PointCloud<PointT>;
+      using PointCloudPtr = typename PointCloud::Ptr;
+      using PointCloudConstPtr = typename PointCloud::ConstPtr;
 
-      typedef typename pcl::search::KdTree<PointT>::Ptr KdTreePtr;
+      using KdTreePtr = typename pcl::search::KdTree<PointT>::Ptr;
       
-      typedef pcl::PointCloud<NormalT> Normals;
-      typedef typename Normals::Ptr NormalsPtr;
-      typedef typename Normals::ConstPtr NormalsConstPtr;
+      using Normals = pcl::PointCloud<NormalT>;
+      using NormalsPtr = typename Normals::Ptr;
+      using NormalsConstPtr = typename Normals::ConstPtr;
 
       public:
 
@@ -243,7 +241,7 @@ namespace pcl
         }
       
         /** \brief Empty destructor */
-        virtual ~DataContainer () {}
+        ~DataContainer () {}
 
         /** \brief Provide a source point cloud dataset (must contain XYZ
           * data!), used to compute the correspondence distance.  
@@ -317,7 +315,7 @@ namespace pcl
           * \param[in] index index of the point in the input cloud
           */
         inline double 
-        getCorrespondenceScore (int index)
+        getCorrespondenceScore (int index) override
         {
           if ( target_cloud_updated_ && !force_no_recompute_ )
           {
@@ -327,15 +325,14 @@ namespace pcl
           std::vector<float> distances (1);
           if (tree_->nearestKSearch (input_->points[index], 1, indices, distances))
             return (distances[0]);
-          else
-            return (std::numeric_limits<double>::max ());
+          return (std::numeric_limits<double>::max ());
         }
 
         /** \brief Get the correspondence score for a given pair of correspondent points
           * \param[in] corr Correspondent points
           */
         inline double 
-        getCorrespondenceScore (const pcl::Correspondence &corr)
+        getCorrespondenceScore (const pcl::Correspondence &corr) override
         {
           // Get the source and the target feature from the list
           const PointT &src = input_->points[corr.index_query];
@@ -350,7 +347,7 @@ namespace pcl
           * \param[in] corr Correspondent points
           */
         inline double
-        getCorrespondenceScoreFromNormals (const pcl::Correspondence &corr)
+        getCorrespondenceScoreFromNormals (const pcl::Correspondence &corr) override
         {
           //assert ( (input_normals_->points.size () != 0) && (target_normals_->points.size () != 0) && "Normals are not set for the input and target point clouds");
           assert (input_normals_ && target_normals_ && "Normals are not set for the input and target point clouds");

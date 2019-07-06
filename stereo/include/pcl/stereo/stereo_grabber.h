@@ -39,6 +39,7 @@
 
 #include <pcl/io/grabber.h>
 #include <pcl/common/time_trigger.h>
+#include <pcl/point_cloud.h>
 #include <pcl/conversions.h>
 #include <pcl/stereo/stereo_matching.h>
 
@@ -67,7 +68,7 @@ namespace pcl
       /** \brief Copy constructor.
         * \param[in] src the Stereo Grabber base object to copy into this
         */
-      StereoGrabberBase (const StereoGrabberBase &src) : Grabber (), impl_ ()
+      StereoGrabberBase (const StereoGrabberBase &src) : impl_ ()
       {
         *this = src;
       }
@@ -83,15 +84,15 @@ namespace pcl
       }
 
       /** \brief Virtual destructor. */
-      virtual ~StereoGrabberBase () throw ();
+      ~StereoGrabberBase () throw ();
 
       /** \brief Starts playing the list of Stereo images if frames_per_second is > 0. Otherwise it works as a trigger: publishes only the next pair in the list. */
-      virtual void 
-      start ();
+      void 
+      start () override;
       
       /** \brief Stops playing the list of Stereo images if frames_per_second is > 0. Otherwise the method has no effect. */
-      virtual void 
-      stop ();
+      void 
+      stop () override;
       
       /** \brief Triggers a callback with new data */
       virtual void 
@@ -100,20 +101,20 @@ namespace pcl
       /** \brief whether the grabber is started (publishing) or not.
         * \return true only if publishing.
         */
-      virtual bool 
-      isRunning () const;
+      bool 
+      isRunning () const override;
       
       /** \return The name of the grabber */
-      virtual std::string 
-      getName () const;
+      std::string 
+      getName () const override;
       
       /** \brief Rewinds to the first pair of files in the list.*/
       virtual void 
       rewind ();
 
       /** \brief Returns the frames_per_second. 0 if grabber is trigger-based */
-      virtual float 
-      getFramesPerSecond () const;
+      float 
+      getFramesPerSecond () const override;
 
       /** \brief Returns whether the repeat flag is on */
       bool 
@@ -129,17 +130,16 @@ namespace pcl
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  template <typename T> class PointCloud;
   template <typename PointT> class StereoGrabber : public StereoGrabberBase
   {
     public:
       StereoGrabber (const std::pair<std::string, std::string> & pair_files, float frames_per_second = 0, bool repeat = false);
       StereoGrabber (const std::vector<std::pair<std::string, std::string> >& files, float frames_per_second = 0, bool repeat = false);
     protected:
-      virtual void 
-      publish (const pcl::PCLPointCloud2& blob, const Eigen::Vector4f& origin, const Eigen::Quaternionf& orientation) const;
+      void 
+      publish (const pcl::PCLPointCloud2& blob, const Eigen::Vector4f& origin, const Eigen::Quaternionf& orientation) const override;
       
-      boost::signals2::signal<void (const boost::shared_ptr<const pcl::PointCloud<PointT> >&)>* signal_;
+      boost::signals2::signal<void (const typename pcl::PointCloud<PointT>::ConstPtr&)>* signal_;
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,7 +147,7 @@ namespace pcl
   StereoGrabber<PointT>::StereoGrabber (const std::pair<std::string, std::string>& pair_files, float frames_per_second, bool repeat)
     : StereoGrabberBase (pair_files, frames_per_second, repeat)
   {
-    signal_ = createSignal<void (const boost::shared_ptr<const pcl::PointCloud<PointT> >&)>();
+    signal_ = createSignal<void (const typename pcl::PointCloud<PointT>::ConstPtr&)>();
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,7 +155,7 @@ namespace pcl
   StereoGrabber<PointT>::StereoGrabber (const std::vector<std::pair<std::string, std::string> >& files, float frames_per_second, bool repeat)
     : StereoGrabberBase (files, frames_per_second, repeat), signal_ ()
   {
-    signal_ = createSignal<void (const boost::shared_ptr<const pcl::PointCloud<PointT> >&)>();
+    signal_ = createSignal<void (const typename pcl::PointCloud<PointT>::ConstPTr&)>();
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

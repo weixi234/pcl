@@ -75,10 +75,10 @@ namespace pcl
   {
     public:
       using Filter<PointT>::extract_removed_indices_;
-      typedef pcl::PointCloud<PointT> PointCloud;
+      using PointCloud = pcl::PointCloud<PointT>;
 
-      typedef boost::shared_ptr< FilterIndices<PointT> > Ptr;
-      typedef boost::shared_ptr< const FilterIndices<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<FilterIndices<PointT> >;
+      using ConstPtr = boost::shared_ptr<const FilterIndices<PointT> >;
 
 
       /** \brief Constructor.
@@ -93,7 +93,7 @@ namespace pcl
       }
 
       /** \brief Empty virtual destructor. */
-      virtual
+      
       ~FilterIndices ()
       {
       }
@@ -186,8 +186,8 @@ namespace pcl
       applyFilter (std::vector<int> &indices) = 0;
 
       /** \brief Abstract filter method for point cloud. */
-      virtual void
-      applyFilter (PointCloud &output) = 0;
+      void
+      applyFilter (PointCloud &output) override = 0;
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -204,7 +204,7 @@ namespace pcl
   class PCL_EXPORTS FilterIndices<pcl::PCLPointCloud2> : public Filter<pcl::PCLPointCloud2>
   {
     public:
-      typedef pcl::PCLPointCloud2 PCLPointCloud2;
+      using PCLPointCloud2 = pcl::PCLPointCloud2;
 
       /** \brief Constructor.
         * \param[in] extract_removed_indices Set to true if you want to extract the indices of points being removed (default = false).
@@ -218,7 +218,7 @@ namespace pcl
       }
 
       /** \brief Empty virtual destructor. */
-      virtual
+      
       ~FilterIndices ()
       {
       }
@@ -299,8 +299,8 @@ namespace pcl
       applyFilter (std::vector<int> &indices) = 0;
 
       /** \brief Abstract filter method for point cloud. */
-      virtual void
-      applyFilter (PCLPointCloud2 &output) = 0;
+      void
+      applyFilter (PCLPointCloud2 &output) override = 0;
   };
 }
 

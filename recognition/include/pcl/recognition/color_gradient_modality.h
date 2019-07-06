@@ -81,7 +81,7 @@ namespace pcl
       };
 
     public:
-      typedef typename pcl::PointCloud<PointInT> PointCloudIn;
+      using PointCloudIn = pcl::PointCloud<PointInT>;
 
       /** \brief Different methods for feature selection/extraction. */
       enum FeatureSelectionMethod
@@ -94,7 +94,7 @@ namespace pcl
       /** \brief Constructor. */
       ColorGradientModality ();
       /** \brief Destructor. */
-      virtual ~ColorGradientModality ();
+      ~ColorGradientModality ();
   
       /** \brief Sets the threshold for the gradient magnitude which is used when quantizing the data.
         *        Gradients with a smaller magnitude are ignored. 
@@ -143,14 +143,14 @@ namespace pcl
 
       /** \brief Returns a reference to the internally computed quantized map. */
       inline QuantizedMap &
-      getQuantizedMap () 
+      getQuantizedMap () override 
       { 
         return (filtered_quantized_color_gradients_);
       }
   
       /** \brief Returns a reference to the internally computed spread quantized map. */
       inline QuantizedMap &
-      getSpreadedQuantizedMap () 
+      getSpreadedQuantizedMap () override 
       { 
         return (spreaded_filtered_quantized_color_gradients_);
       }
@@ -171,7 +171,7 @@ namespace pcl
         */
       void
       extractFeatures (const MaskMap & mask, size_t nr_features, size_t modalityIndex,
-                       std::vector<QuantizedMultiModFeature> & features) const;
+                       std::vector<QuantizedMultiModFeature> & features) const override;
   
       /** \brief Extracts all possible features from the modality within the specified mask.
         * \param[in] mask defines the areas where features are searched in. 
@@ -181,13 +181,13 @@ namespace pcl
         */
       void
       extractAllFeatures (const MaskMap & mask, size_t nr_features, size_t modalityIndex,
-                          std::vector<QuantizedMultiModFeature> & features) const;
+                          std::vector<QuantizedMultiModFeature> & features) const override;
   
       /** \brief Provide a pointer to the input dataset (overwrites the PCLBase::setInputCloud method)
         * \param cloud the const boost shared pointer to a PointCloud message
         */
-      virtual void 
-      setInputCloud (const typename PointCloudIn::ConstPtr & cloud) 
+      void 
+      setInputCloud (const typename PointCloudIn::ConstPtr & cloud) override 
       { 
         input_ = cloud;
       }
@@ -279,11 +279,7 @@ ColorGradientModality ()
   , feature_selection_method_ (DISTANCE_MAGNITUDE_SCORE)
   , gradient_magnitude_threshold_ (10.0f)
   , gradient_magnitude_threshold_feature_extraction_ (55.0f)
-  , color_gradients_ ()
   , spreading_size_ (8)
-  , quantized_color_gradients_ ()
-  , filtered_quantized_color_gradients_ ()
-  , spreaded_filtered_quantized_color_gradients_ ()
 {
 }
 
@@ -311,7 +307,7 @@ computeGaussianKernel (const size_t kernel_size, const float sigma, std::vector 
   };
 
   const float* fixed_kernel = n % 2 == 1 && n <= SMALL_GAUSSIAN_SIZE && sigma <= 0 ?
-      small_gaussian_tab[n>>1] : 0;
+      small_gaussian_tab[n>>1] : nullptr;
 
   //CV_Assert( ktype == CV_32F || ktype == CV_64F );
   /*Mat kernel(n, 1, ktype);*/
@@ -323,8 +319,7 @@ computeGaussianKernel (const size_t kernel_size, const float sigma, std::vector 
   double scale2X = -0.5/(sigmaX*sigmaX);
   double sum = 0;
 
-  int i;
-  for( i = 0; i < n; i++ )
+  for( int i = 0; i < n; i++ )
   {
     double x = i - (n-1)*0.5;
     double t = fixed_kernel ? double (fixed_kernel[i]) : std::exp (scale2X*x*x);
@@ -334,7 +329,7 @@ computeGaussianKernel (const size_t kernel_size, const float sigma, std::vector 
   }
 
   sum = 1./sum;
-  for (i = 0; i < n; i++ )
+  for ( int i = 0; i < n; i++ )
   {
     cf[i] = float (cf[i]*sum);
   }

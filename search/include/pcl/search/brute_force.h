@@ -50,11 +50,11 @@ namespace pcl
     template<typename PointT>
     class BruteForce: public Search<PointT>
     {
-      typedef typename Search<PointT>::PointCloud PointCloud;
-      typedef typename Search<PointT>::PointCloudConstPtr PointCloudConstPtr;
+      using PointCloud = typename Search<PointT>::PointCloud;
+      using PointCloudConstPtr = typename Search<PointT>::PointCloudConstPtr;
 
-      typedef boost::shared_ptr<std::vector<int> > IndicesPtr;
-      typedef boost::shared_ptr<const std::vector<int> > IndicesConstPtr;
+      using IndicesPtr = boost::shared_ptr<std::vector<int> >;
+      using IndicesConstPtr = boost::shared_ptr<const std::vector<int> >;
 
       using pcl::search::Search<PointT>::input_;
       using pcl::search::Search<PointT>::indices_;
@@ -90,7 +90,7 @@ namespace pcl
         }
 
         /** \brief Destructor for KdTree. */
-        virtual
+        
         ~BruteForce ()
         {
         }
@@ -104,7 +104,7 @@ namespace pcl
           * \return number of neighbors found
           */
         int
-        nearestKSearch (const PointT &point, int k, std::vector<int> &k_indices, std::vector<float> &k_distances) const;
+        nearestKSearch (const PointT &point, int k, std::vector<int> &k_indices, std::vector<float> &k_distances) const override;
 
         /** \brief Search for all the nearest neighbors of the query point in a given radius.
           * \param[in] point the given query point
@@ -119,7 +119,7 @@ namespace pcl
         int
         radiusSearch (const PointT& point, double radius,
                       std::vector<int> &k_indices, std::vector<float> &k_sqr_distances,
-                      unsigned int max_nn = 0) const;
+                      unsigned int max_nn = 0) const override;
 
       private:
         int

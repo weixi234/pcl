@@ -55,8 +55,8 @@ namespace pcl
   class MomentInvariantsEstimation: public Feature<PointInT, PointOutT>
   {
     public:
-      typedef boost::shared_ptr<MomentInvariantsEstimation<PointInT, PointOutT> > Ptr;
-      typedef boost::shared_ptr<const MomentInvariantsEstimation<PointInT, PointOutT> > ConstPtr;
+      using Ptr = boost::shared_ptr<MomentInvariantsEstimation<PointInT, PointOutT> >;
+      using ConstPtr = boost::shared_ptr<const MomentInvariantsEstimation<PointInT, PointOutT> >;
       using Feature<PointInT, PointOutT>::feature_name_;
       using Feature<PointInT, PointOutT>::getClassName;
       using Feature<PointInT, PointOutT>::indices_;
@@ -65,10 +65,10 @@ namespace pcl
       using Feature<PointInT, PointOutT>::surface_;
       using Feature<PointInT, PointOutT>::input_;
 
-      typedef typename Feature<PointInT, PointOutT>::PointCloudOut PointCloudOut;
+      using PointCloudOut = typename Feature<PointInT, PointOutT>::PointCloudOut;
 
       /** \brief Empty constructor. */
-      MomentInvariantsEstimation () : xyz_centroid_ (), temp_pt_ ()
+      MomentInvariantsEstimation ()
       {
         feature_name_ = "MomentInvariantsEstimation";
       };
@@ -102,7 +102,7 @@ namespace pcl
         * \param[out] output the resultant point cloud model dataset that contains the moment invariants
         */
       void 
-      computeFeature (PointCloudOut &output);
+      computeFeature (PointCloudOut &output) override;
     private:
       /** \brief 16-bytes aligned placeholder for the XYZ centroid of a surface patch. */
       Eigen::Vector4f xyz_centroid_;

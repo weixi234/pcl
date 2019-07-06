@@ -15,9 +15,9 @@ private:
   static Scene *instance_;
 
   Scene ();
-  Scene (const Scene& op);
+  Scene (const Scene& op) = delete;
   Scene&
-  operator= (const Scene& op);
+  operator= (const Scene& op) = delete;
 
 public:
 
@@ -82,6 +82,6 @@ private:
   std::vector<Viewport*> viewports_;
   std::vector<Object*> objects_;
 
-  boost::mutex render_mutex_;
+  std::mutex render_mutex_;
 
 };

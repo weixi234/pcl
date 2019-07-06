@@ -39,6 +39,7 @@
 
 #pragma once
 
+#include <pcl/pcl_macros.h>
 #include <pcl/PolygonMesh.h>
 #include <pcl/features/feature.h>
 #include <set>
@@ -60,8 +61,8 @@ namespace pcl
       using Feature <PointInT, PointOutT>::surface_;
       using Feature <PointInT, PointOutT>::tree_;
 
-      typedef typename pcl::Feature <PointInT, PointOutT>::PointCloudOut PointCloudOut;
-      typedef typename pcl::Feature <PointInT, PointOutT>::PointCloudIn PointCloudIn;
+      using PointCloudOut = typename pcl::Feature <PointInT, PointOutT>::PointCloudOut;
+      using PointCloudIn = typename pcl::Feature <PointInT, PointOutT>::PointCloudIn;
 
     public:
 
@@ -69,7 +70,7 @@ namespace pcl
       ROPSEstimation ();
 
       /** \brief Virtual destructor. */
-      virtual
+      
       ~ROPSEstimation ();
 
       /** \brief Allows to set the number of partition bins that is used for distribution matrix calculation.
@@ -119,8 +120,8 @@ namespace pcl
       /** \brief Abstract feature estimation method.
         * \param[out] output the resultant features
         */
-      virtual void
-      computeFeature (PointCloudOut& output);
+      void
+      computeFeature (PointCloudOut& output) override;
 
       /** \brief This method simply builds the list of triangles for every point.
         * The list of triangles for each point consists of indices of triangles it belongs to.
@@ -221,8 +222,7 @@ namespace pcl
       std::vector <std::vector <unsigned int> > triangles_of_the_point_;
 
     public:
-
-      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+      PCL_MAKE_ALIGNED_OPERATOR_NEW
   };
 }
 

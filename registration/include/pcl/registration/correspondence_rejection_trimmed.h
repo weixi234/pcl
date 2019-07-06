@@ -67,8 +67,8 @@ namespace pcl
       using CorrespondenceRejector::getClassName;
 
       public:
-        typedef boost::shared_ptr<CorrespondenceRejectorTrimmed> Ptr;
-        typedef boost::shared_ptr<const CorrespondenceRejectorTrimmed> ConstPtr;
+        using Ptr = boost::shared_ptr<CorrespondenceRejectorTrimmed>;
+        using ConstPtr = boost::shared_ptr<const CorrespondenceRejectorTrimmed>;
 
         /** \brief Empty constructor. */
         CorrespondenceRejectorTrimmed () : 
@@ -79,7 +79,7 @@ namespace pcl
         }
 
         /** \brief Destructor. */
-        virtual ~CorrespondenceRejectorTrimmed () {}
+        ~CorrespondenceRejectorTrimmed () {}
 
         /** \brief Set the expected ratio of overlap between point clouds (in
           * terms of correspondences).
@@ -113,7 +113,7 @@ namespace pcl
           */
         void
         getRemainingCorrespondences (const pcl::Correspondences& original_correspondences,
-                                     pcl::Correspondences& remaining_correspondences);
+                                     pcl::Correspondences& remaining_correspondences) override;
 
       protected:
 
@@ -121,7 +121,7 @@ namespace pcl
           * \param[out] correspondences the set of resultant correspondences.
           */
         inline void 
-        applyRejection (pcl::Correspondences &correspondences)
+        applyRejection (pcl::Correspondences &correspondences) override
         {
           getRemainingCorrespondences (*input_correspondences_, correspondences);
         }

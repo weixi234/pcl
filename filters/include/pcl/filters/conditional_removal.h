@@ -37,6 +37,7 @@
 
 #pragma once
 
+#include <pcl/pcl_macros.h>
 #include <pcl/common/eigen.h>
 #include <pcl/filters/filter.h>
 
@@ -48,10 +49,10 @@ namespace pcl
     /** \brief The kind of comparison operations that are possible within a 
       * comparison object
       */
-    typedef enum
+    enum CompareOp
     {
       GT, GE, LT, LE, EQ
-    } CompareOp;
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -88,11 +89,11 @@ namespace pcl
   class ComparisonBase
   {
     public:
-      typedef boost::shared_ptr< ComparisonBase<PointT> > Ptr;
-      typedef boost::shared_ptr< const ComparisonBase<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<ComparisonBase<PointT> >;
+      using ConstPtr = boost::shared_ptr<const ComparisonBase<PointT> >;
 
       /** \brief Constructor. */
-      ComparisonBase () : capable_ (false), field_name_ (), offset_ (), op_ () {}
+      ComparisonBase () : capable_ (false), offset_ (), op_ () {}
 
       /** \brief Destructor. */
       virtual ~ComparisonBase () {}
@@ -132,8 +133,8 @@ namespace pcl
     using ComparisonBase<PointT>::capable_;
 
     public:
-      typedef boost::shared_ptr< FieldComparison<PointT> > Ptr;
-      typedef boost::shared_ptr< const FieldComparison<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<FieldComparison<PointT> >;
+      using ConstPtr = boost::shared_ptr<const FieldComparison<PointT> >;
 
 
       /** \brief Construct a FieldComparison
@@ -164,14 +165,14 @@ namespace pcl
       }
 
       /** \brief Destructor. */
-      virtual ~FieldComparison ();
+      ~FieldComparison ();
 
       /** \brief Determine the result of this comparison.  
         * \param point the point to evaluate
         * \return the result of this comparison.
         */
-      virtual bool
-      evaluate (const PointT &point) const;
+      bool
+      evaluate (const PointT &point) const override;
 
     protected:
       /** \brief All types (that we care about) can be represented as a double. */
@@ -196,8 +197,8 @@ namespace pcl
     using ComparisonBase<PointT>::op_;
 
     public:
-      typedef boost::shared_ptr< PackedRGBComparison<PointT> > Ptr;
-      typedef boost::shared_ptr< const PackedRGBComparison<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<PackedRGBComparison<PointT> >;
+      using ConstPtr = boost::shared_ptr<const PackedRGBComparison<PointT> >;
 
       /** \brief Construct a PackedRGBComparison
         * \param component_name either "r", "g" or "b"
@@ -207,14 +208,14 @@ namespace pcl
       PackedRGBComparison (const std::string &component_name, ComparisonOps::CompareOp op, double compare_val);
 
       /** \brief Destructor. */
-      virtual ~PackedRGBComparison () {}
+      ~PackedRGBComparison () {}
 
       /** \brief Determine the result of this comparison.  
         * \param point the point to evaluate
         * \return the result of this comparison.
         */
-      virtual bool
-      evaluate (const PointT &point) const;
+      bool
+      evaluate (const PointT &point) const override;
 
     protected:
       /** \brief The name of the component. */
@@ -228,7 +229,7 @@ namespace pcl
 
     private:
       PackedRGBComparison () :
-        component_name_ (), component_offset_ (), compare_val_ ()
+        component_offset_ (), compare_val_ ()
       {
       } // not allowed
 
@@ -243,8 +244,8 @@ namespace pcl
     using ComparisonBase<PointT>::op_;
 
     public:
-      typedef boost::shared_ptr< PackedHSIComparison<PointT> > Ptr;
-      typedef boost::shared_ptr< const PackedHSIComparison<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<PackedHSIComparison<PointT> >;
+      using ConstPtr = boost::shared_ptr<const PackedHSIComparison<PointT> >;
  
       /** \brief Construct a PackedHSIComparison 
         * \param component_name either "h", "s" or "i"
@@ -254,21 +255,21 @@ namespace pcl
       PackedHSIComparison (const std::string &component_name, ComparisonOps::CompareOp op, double compare_val);
 
       /** \brief Destructor. */
-      virtual ~PackedHSIComparison () {}
+      ~PackedHSIComparison () {}
 
       /** \brief Determine the result of this comparison.  
         * \param point the point to evaluate
         * \return the result of this comparison.
         */
-      virtual bool
-      evaluate (const PointT &point) const;
+      bool
+      evaluate (const PointT &point) const override;
 
-      typedef enum
+      enum ComponentId
       {
         H, // -128 to 127 corresponds to -pi to pi
         S, // 0 to 255
         I  // 0 to 255
-      } ComponentId;
+      };
 
     protected:
       /** \brief The name of the component. */
@@ -285,7 +286,7 @@ namespace pcl
 
     private:
       PackedHSIComparison () :
-        component_name_ (), component_id_ (), compare_val_ (), rgb_offset_ ()
+        component_id_ (), compare_val_ (), rgb_offset_ ()
       {
       } // not allowed
   };
@@ -309,17 +310,17 @@ namespace pcl
   class TfQuadraticXYZComparison : public pcl::ComparisonBase<PointT>
   {
     public:
-      EIGEN_MAKE_ALIGNED_OPERATOR_NEW     //needed whenever there is a fixed size Eigen:: vector or matrix in a class
+      PCL_MAKE_ALIGNED_OPERATOR_NEW  // needed whenever there is a fixed size Eigen:: vector or matrix in a class
 
-      typedef boost::shared_ptr<TfQuadraticXYZComparison<PointT> > Ptr;
-      typedef boost::shared_ptr<const TfQuadraticXYZComparison<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<TfQuadraticXYZComparison<PointT> >;
+      using ConstPtr = boost::shared_ptr<const TfQuadraticXYZComparison<PointT> >;
 
       /** \brief Constructor.
        */
       TfQuadraticXYZComparison ();
       
       /** \brief Empty destructor */
-      virtual ~TfQuadraticXYZComparison () {}
+      ~TfQuadraticXYZComparison () {}
 
       /** \brief Constructor.
        * \param op the operator "[OP]" of the comparison "p'Ap + 2v'p + c [OP] 0".
@@ -422,8 +423,8 @@ namespace pcl
        * \param point the point to evaluate
        * \return the result of this comparison.
        */
-      virtual bool
-      evaluate (const PointT &point) const;
+      bool
+      evaluate (const PointT &point) const override;
 
     protected:
       using pcl::ComparisonBase<PointT>::capable_;
@@ -445,12 +446,12 @@ namespace pcl
   class ConditionBase
   {
     public:
-      typedef typename pcl::ComparisonBase<PointT> ComparisonBase;
-      typedef typename ComparisonBase::Ptr ComparisonBasePtr;
-      typedef typename ComparisonBase::ConstPtr ComparisonBaseConstPtr;
+      using ComparisonBase = pcl::ComparisonBase<PointT>;
+      using ComparisonBasePtr = typename ComparisonBase::Ptr;
+      using ComparisonBaseConstPtr = typename ComparisonBase::ConstPtr;
 
-      typedef boost::shared_ptr<ConditionBase<PointT> > Ptr;
-      typedef boost::shared_ptr<const ConditionBase<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<ConditionBase<PointT> >;
+      using ConstPtr = boost::shared_ptr<const ConditionBase<PointT> >;
 
       /** \brief Constructor. */
       ConditionBase () : capable_ (true), comparisons_ (), conditions_ ()
@@ -512,8 +513,8 @@ namespace pcl
     using ConditionBase<PointT>::comparisons_;
 
     public:
-      typedef boost::shared_ptr<ConditionAnd<PointT> > Ptr;
-      typedef boost::shared_ptr<const ConditionAnd<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<ConditionAnd<PointT> >;
+      using ConstPtr = boost::shared_ptr<const ConditionAnd<PointT> >;
 
       /** \brief Constructor. */
       ConditionAnd () :
@@ -527,8 +528,8 @@ namespace pcl
         * The ConditionAnd evaluates to true when ALL
         * comparisons and nested conditions evaluate to true
         */
-      virtual bool
-      evaluate (const PointT &point) const;
+      bool
+      evaluate (const PointT &point) const override;
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -540,8 +541,8 @@ namespace pcl
     using ConditionBase<PointT>::comparisons_;
 
     public:
-      typedef boost::shared_ptr<ConditionOr<PointT> > Ptr;
-      typedef boost::shared_ptr<const ConditionOr<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<ConditionOr<PointT> >;
+      using ConstPtr = boost::shared_ptr<const ConditionOr<PointT> >;
 
       /** \brief Constructor. */
       ConditionOr () :
@@ -555,8 +556,8 @@ namespace pcl
         * The ConditionOr evaluates to true when ANY
         * comparisons or nested conditions evaluate to true
         */
-      virtual bool
-      evaluate (const PointT &point) const;
+      bool
+      evaluate (const PointT &point) const override;
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -600,14 +601,14 @@ namespace pcl
     using Filter<PointT>::removed_indices_;
     using Filter<PointT>::extract_removed_indices_;
 
-    typedef typename Filter<PointT>::PointCloud PointCloud;
-    typedef typename PointCloud::Ptr PointCloudPtr;
-    typedef typename PointCloud::ConstPtr PointCloudConstPtr;
+    using PointCloud = typename Filter<PointT>::PointCloud;
+    using PointCloudPtr = typename PointCloud::Ptr;
+    using PointCloudConstPtr = typename PointCloud::ConstPtr;
 
     public:
-      typedef typename pcl::ConditionBase<PointT> ConditionBase;
-      typedef typename ConditionBase::Ptr ConditionBasePtr;
-      typedef typename ConditionBase::ConstPtr ConditionBaseConstPtr;
+      using ConditionBase = pcl::ConditionBase<PointT>;
+      using ConditionBasePtr = typename ConditionBase::Ptr;
+      using ConditionBaseConstPtr = typename ConditionBase::ConstPtr;
 
       /** \brief the default constructor.  
         *
@@ -667,7 +668,7 @@ namespace pcl
         * \param output the resultant point cloud message
         */
       void
-      applyFilter (PointCloud &output);
+      applyFilter (PointCloud &output) override;
 
       /** \brief True if capable. */
       bool capable_;

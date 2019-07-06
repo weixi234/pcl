@@ -40,9 +40,6 @@
 #include <pcl/point_types.h>
 #include <pcl/features/feature.h>
 
-#if defined BUILD_Maintainer && defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ > 3
-#pragma GCC diagnostic ignored "-Weffc++"
-#endif
 namespace pcl
 {
   // Forward declarations
@@ -58,10 +55,10 @@ namespace pcl
   class PCL_EXPORTS NarfDescriptor : public Feature<PointWithRange,Narf36>
   {
     public:
-      typedef boost::shared_ptr<NarfDescriptor> Ptr;
-      typedef boost::shared_ptr<const NarfDescriptor> ConstPtr;
+      using Ptr = boost::shared_ptr<NarfDescriptor>;
+      using ConstPtr = boost::shared_ptr<const NarfDescriptor>;
       // =====TYPEDEFS=====
-      typedef Feature<PointWithRange,Narf36> BaseClass;
+      using BaseClass = Feature<PointWithRange,Narf36>;
       
       // =====STRUCTS/CLASSES=====
       struct Parameters
@@ -73,14 +70,14 @@ namespace pcl
       
       // =====CONSTRUCTOR & DESTRUCTOR=====
       /** Constructor */
-      NarfDescriptor (const RangeImage* range_image=NULL, const std::vector<int>* indices=NULL);
+      NarfDescriptor (const RangeImage* range_image=nullptr, const std::vector<int>* indices=nullptr);
       /** Destructor */
-      virtual ~NarfDescriptor();
+      ~NarfDescriptor();
       
       // =====METHODS=====
       //! Set input data
       void 
-      setRangeImage (const RangeImage* range_image, const std::vector<int>* indices=NULL);
+      setRangeImage (const RangeImage* range_image, const std::vector<int>* indices=nullptr);
       
       //! Overwrite the compute function of the base class
       void 
@@ -98,11 +95,8 @@ namespace pcl
       
       // =====PROTECTED METHODS=====
       /** Implementation of abstract derived function */
-      virtual void 
-      computeFeature (PointCloudOut& output);
+      void 
+      computeFeature (PointCloudOut& output) override;
   };
 
 }  // namespace end
-#if defined BUILD_Maintainer && defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ > 3
-#pragma GCC diagnostic warning "-Weffc++"
-#endif

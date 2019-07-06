@@ -56,7 +56,7 @@ class StatisticsDialog : public QDialog
 
   public:
     /// @brief Default Constructor
-    StatisticsDialog(QWidget *parent = 0);
+    StatisticsDialog(QWidget *parent = nullptr);
     /// @brief Destructor
     ~StatisticsDialog ();
     
@@ -65,7 +65,7 @@ class StatisticsDialog : public QDialog
     void update ();
     
   private Q_SLOTS:
-    void accept ();
+    void accept () override;
     
   private:
     /// The button box.

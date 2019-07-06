@@ -42,7 +42,7 @@
 #include <pcl/sample_consensus/model_types.h>
 #include <pcl/common/common.h>
 #include <pcl/common/distances.h>
-#include <limits.h>
+#include <climits>
 
 namespace pcl
 {
@@ -73,11 +73,11 @@ namespace pcl
       using SampleConsensusModelFromNormals<PointT, PointNT>::normal_distance_weight_;
       using SampleConsensusModel<PointT>::error_sqr_dists_;
 
-      typedef typename SampleConsensusModel<PointT>::PointCloud PointCloud;
-      typedef typename SampleConsensusModel<PointT>::PointCloudPtr PointCloudPtr;
-      typedef typename SampleConsensusModel<PointT>::PointCloudConstPtr PointCloudConstPtr;
+      using PointCloud = typename SampleConsensusModel<PointT>::PointCloud;
+      using PointCloudPtr = typename SampleConsensusModel<PointT>::PointCloudPtr;
+      using PointCloudConstPtr = typename SampleConsensusModel<PointT>::PointCloudConstPtr;
 
-      typedef boost::shared_ptr<SampleConsensusModelCone> Ptr;
+      using Ptr = boost::shared_ptr<SampleConsensusModelCone<PointT, PointNT> >;
 
       /** \brief Constructor for base SampleConsensusModelCone.
         * \param[in] cloud the input point cloud dataset
@@ -122,14 +122,14 @@ namespace pcl
       SampleConsensusModelCone (const SampleConsensusModelCone &source) :
         SampleConsensusModel<PointT> (), 
         SampleConsensusModelFromNormals<PointT, PointNT> (),
-        axis_ (), eps_angle_ (), min_angle_ (), max_angle_ ()
+        eps_angle_ (), min_angle_ (), max_angle_ ()
       {
         *this = source;
         model_name_ = "SampleConsensusModelCone";
       }
       
       /** \brief Empty destructor */
-      virtual ~SampleConsensusModelCone () {}
+      ~SampleConsensusModelCone () {}
 
       /** \brief Copy constructor.
         * \param[in] source the model to copy into this
@@ -197,7 +197,7 @@ namespace pcl
         */
       bool
       computeModelCoefficients (const std::vector<int> &samples,
-                                Eigen::VectorXf &model_coefficients) const;
+                                Eigen::VectorXf &model_coefficients) const override;
 
       /** \brief Compute all distances from the cloud data to a given cone model.
         * \param[in] model_coefficients the coefficients of a cone model that we need to compute distances to
@@ -205,7 +205,7 @@ namespace pcl
         */
       void
       getDistancesToModel (const Eigen::VectorXf &model_coefficients,
-                           std::vector<double> &distances) const;
+                           std::vector<double> &distances) const override;
 
       /** \brief Select all the points which respect the given model coefficients as inliers.
         * \param[in] model_coefficients the coefficients of a cone model that we need to compute distances to
@@ -215,7 +215,7 @@ namespace pcl
       void 
       selectWithinDistance (const Eigen::VectorXf &model_coefficients, 
                             const double threshold, 
-                            std::vector<int> &inliers);
+                            std::vector<int> &inliers) override;
 
       /** \brief Count all the points which respect the given model coefficients as inliers. 
         * 
@@ -223,9 +223,9 @@ namespace pcl
         * \param[in] threshold maximum admissible distance threshold for determining the inliers from the outliers
         * \return the resultant number of inliers
         */
-      virtual int
+      int
       countWithinDistance (const Eigen::VectorXf &model_coefficients,
-                           const double threshold) const;
+                           const double threshold) const override;
 
 
       /** \brief Recompute the cone coefficients using the given inlier set and return them to the user.
@@ -237,7 +237,7 @@ namespace pcl
       void
       optimizeModelCoefficients (const std::vector<int> &inliers,
                                  const Eigen::VectorXf &model_coefficients,
-                                 Eigen::VectorXf &optimized_coefficients) const;
+                                 Eigen::VectorXf &optimized_coefficients) const override;
 
 
       /** \brief Create a new point cloud with inliers projected onto the cone model.
@@ -250,7 +250,7 @@ namespace pcl
       projectPoints (const std::vector<int> &inliers,
                      const Eigen::VectorXf &model_coefficients,
                      PointCloud &projected_points,
-                     bool copy_data_fields = true) const;
+                     bool copy_data_fields = true) const override;
 
       /** \brief Verify whether a subset of indices verifies the given cone model coefficients.
         * \param[in] indices the data indices that need to be tested against the cone model
@@ -260,11 +260,11 @@ namespace pcl
       bool
       doSamplesVerifyModel (const std::set<int> &indices,
                             const Eigen::VectorXf &model_coefficients,
-                            const double threshold) const;
+                            const double threshold) const override;
 
       /** \brief Return an unique id for this model (SACMODEL_CONE). */
       inline pcl::SacModel 
-      getModelType () const { return (SACMODEL_CONE); }
+      getModelType () const override { return (SACMODEL_CONE); }
 
     protected:
       using SampleConsensusModel<PointT>::sample_size_;
@@ -280,15 +280,15 @@ namespace pcl
       /** \brief Check whether a model is valid given the user constraints.
         * \param[in] model_coefficients the set of model coefficients
         */
-      virtual bool
-      isModelValid (const Eigen::VectorXf &model_coefficients) const;
+      bool
+      isModelValid (const Eigen::VectorXf &model_coefficients) const override;
 
       /** \brief Check if a sample of indices results in a good sample of points
         * indices. Pure virtual.
         * \param[in] samples the resultant index samples
         */
       bool
-      isSampleGood (const std::vector<int> &samples) const;
+      isSampleGood (const std::vector<int> &samples) const override;
 
     private:
       /** \brief The axis along which we need to search for a plane perpendicular to. */
@@ -301,9 +301,6 @@ namespace pcl
       double min_angle_;
       double max_angle_;
 
-#if defined BUILD_Maintainer && defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ > 3
-#pragma GCC diagnostic ignored "-Weffc++"
-#endif
       /** \brief Functor for the optimization function */
       struct OptimizationFunctor : pcl::Functor<float>
       {
@@ -352,9 +349,6 @@ namespace pcl
         const pcl::SampleConsensusModelCone<PointT, PointNT> *model_;
         const std::vector<int> &indices_;
       };
-#if defined BUILD_Maintainer && defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ > 3
-#pragma GCC diagnostic warning "-Weffc++"
-#endif
   };
 }
 

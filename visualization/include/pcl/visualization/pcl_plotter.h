@@ -76,14 +76,16 @@ namespace pcl
     class PCL_EXPORTS PCLPlotter
     {
       public:
-	
+        using Ptr = boost::shared_ptr<PCLPlotter>;
+        using ConstPtr = boost::shared_ptr<const PCLPlotter>;
+
         /**\brief A representation of polynomial function. i'th element of the vector denotes the coefficient of x^i of the polynomial in variable x. 
          */
-        typedef std::vector<double> PolynomialFunction;
+        using PolynomialFunction = std::vector<double>;
         
         /**\brief A representation of rational function, defined as the ratio of two polynomial functions. pair::first denotes the numerator and pair::second denotes the denominator of the Rational function. 
          */
-        typedef std::pair<PolynomialFunction, PolynomialFunction> RationalFunction;
+        using RationalFunction = std::pair<PolynomialFunction, PolynomialFunction>;
         
         /** \brief PCL Plotter constructor.  
           * \param[in] name Name of the window
@@ -107,7 +109,7 @@ namespace pcl
                      unsigned long size, 
                      char const * name = "Y Axis", 
                      int type  = vtkChart::LINE ,
-                     char const *color=NULL);
+                     char const *color=nullptr);
 	
         /** \brief Adds a plot with correspondences in vectors arrayX and arrayY. This is the vector version of the addPlotData function. 
           * \param[in] array_x X coordinates of point correspondence array
@@ -415,8 +417,8 @@ namespace pcl
           {
             return (new ExitMainLoopTimerCallback);
           }
-          virtual void 
-          Execute (vtkObject*, unsigned long event_id, void* call_data);
+          void 
+          Execute (vtkObject*, unsigned long event_id, void* call_data) override;
 
           int right_timer_id;
           vtkRenderWindowInteractor *interactor;
@@ -428,8 +430,8 @@ namespace pcl
           {
             return new ExitCallback;
           }
-          virtual void 
-          Execute (vtkObject*, unsigned long event_id, void*);
+          void 
+          Execute (vtkObject*, unsigned long event_id, void*) override;
 
           PCLPlotter *plotter;
         };

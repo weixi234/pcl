@@ -58,24 +58,24 @@ namespace pcl
     class TransformationEstimationPointToPlane : public TransformationEstimationLM<PointSource, PointTarget, Scalar>
     {
       public:
-        typedef boost::shared_ptr<TransformationEstimationPointToPlane<PointSource, PointTarget, Scalar> > Ptr;
-        typedef boost::shared_ptr<const TransformationEstimationPointToPlane<PointSource, PointTarget, Scalar> > ConstPtr;
+        using Ptr = boost::shared_ptr<TransformationEstimationPointToPlane<PointSource, PointTarget, Scalar> >;
+        using ConstPtr = boost::shared_ptr<const TransformationEstimationPointToPlane<PointSource, PointTarget, Scalar> >;
 
-        typedef pcl::PointCloud<PointSource> PointCloudSource;
-        typedef typename PointCloudSource::Ptr PointCloudSourcePtr;
-        typedef typename PointCloudSource::ConstPtr PointCloudSourceConstPtr;
-        typedef pcl::PointCloud<PointTarget> PointCloudTarget;
-        typedef PointIndices::Ptr PointIndicesPtr;
-        typedef PointIndices::ConstPtr PointIndicesConstPtr;
+        using PointCloudSource = pcl::PointCloud<PointSource>;
+        using PointCloudSourcePtr = typename PointCloudSource::Ptr;
+        using PointCloudSourceConstPtr = typename PointCloudSource::ConstPtr;
+        using PointCloudTarget = pcl::PointCloud<PointTarget>;
+        using PointIndicesPtr = PointIndices::Ptr;
+        using PointIndicesConstPtr = PointIndices::ConstPtr;
 
-        typedef Eigen::Matrix<Scalar, 4, 1> Vector4;
+        using Vector4 = Eigen::Matrix<Scalar, 4, 1>;
 
         TransformationEstimationPointToPlane () {};
-        virtual ~TransformationEstimationPointToPlane () {};
+        ~TransformationEstimationPointToPlane () {};
 
       protected:
-        virtual Scalar
-        computeDistance (const PointSource &p_src, const PointTarget &p_tgt) const
+        Scalar
+        computeDistance (const PointSource &p_src, const PointTarget &p_tgt) const override
         {
           // Compute the point-to-plane distance
           Vector4 s (p_src.x, p_src.y, p_src.z, 0);
@@ -84,8 +84,8 @@ namespace pcl
           return ((s - t).dot (n));
         }
 
-        virtual Scalar
-        computeDistance (const Vector4 &p_src, const PointTarget &p_tgt) const
+        Scalar
+        computeDistance (const Vector4 &p_src, const PointTarget &p_tgt) const override
         {
           // Compute the point-to-plane distance
           Vector4 t (p_tgt.x, p_tgt.y, p_tgt.z, 0);

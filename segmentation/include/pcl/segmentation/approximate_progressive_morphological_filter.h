@@ -57,7 +57,7 @@ namespace pcl
   {
     public:
 
-      typedef pcl::PointCloud <PointT> PointCloud;
+      using PointCloud = pcl::PointCloud<PointT>;
 
       using PCLBase <PointT>::input_;
       using PCLBase <PointT>::indices_;
@@ -69,7 +69,7 @@ namespace pcl
       /** \brief Constructor that sets default values for member variables. */
       ApproximateProgressiveMorphologicalFilter ();
 
-      virtual
+      
       ~ApproximateProgressiveMorphologicalFilter ();
 
       /** \brief Get the maximum window size to be used in filtering ground returns. */

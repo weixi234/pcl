@@ -93,19 +93,19 @@ namespace pcl
   class IterativeClosestPoint : public Registration<PointSource, PointTarget, Scalar>
   {
     public:
-      typedef typename Registration<PointSource, PointTarget, Scalar>::PointCloudSource PointCloudSource;
-      typedef typename PointCloudSource::Ptr PointCloudSourcePtr;
-      typedef typename PointCloudSource::ConstPtr PointCloudSourceConstPtr;
+      using PointCloudSource = typename Registration<PointSource, PointTarget, Scalar>::PointCloudSource;
+      using PointCloudSourcePtr = typename PointCloudSource::Ptr;
+      using PointCloudSourceConstPtr = typename PointCloudSource::ConstPtr;
 
-      typedef typename Registration<PointSource, PointTarget, Scalar>::PointCloudTarget PointCloudTarget;
-      typedef typename PointCloudTarget::Ptr PointCloudTargetPtr;
-      typedef typename PointCloudTarget::ConstPtr PointCloudTargetConstPtr;
+      using PointCloudTarget = typename Registration<PointSource, PointTarget, Scalar>::PointCloudTarget;
+      using PointCloudTargetPtr = typename PointCloudTarget::Ptr;
+      using PointCloudTargetConstPtr = typename PointCloudTarget::ConstPtr;
 
-      typedef PointIndices::Ptr PointIndicesPtr;
-      typedef PointIndices::ConstPtr PointIndicesConstPtr;
+      using PointIndicesPtr = PointIndices::Ptr;
+      using PointIndicesConstPtr = PointIndices::ConstPtr;
 
-      typedef boost::shared_ptr<IterativeClosestPoint<PointSource, PointTarget, Scalar> > Ptr;
-      typedef boost::shared_ptr<const IterativeClosestPoint<PointSource, PointTarget, Scalar> > ConstPtr;
+      using Ptr = boost::shared_ptr<IterativeClosestPoint<PointSource, PointTarget, Scalar> >;
+      using ConstPtr = boost::shared_ptr<const IterativeClosestPoint<PointSource, PointTarget, Scalar> >;
 
       using Registration<PointSource, PointTarget, Scalar>::reg_name_;
       using Registration<PointSource, PointTarget, Scalar>::getClassName;
@@ -131,7 +131,7 @@ namespace pcl
       using Registration<PointSource, PointTarget, Scalar>::correspondence_rejectors_;
 
       typename pcl::registration::DefaultConvergenceCriteria<Scalar>::Ptr convergence_criteria_;
-      typedef typename Registration<PointSource, PointTarget, Scalar>::Matrix4 Matrix4;
+      using Matrix4 = typename Registration<PointSource, PointTarget, Scalar>::Matrix4;
 
       /** \brief Empty constructor. */
       IterativeClosestPoint () 
@@ -152,7 +152,7 @@ namespace pcl
       };
 
       /** \brief Empty destructor */
-      virtual ~IterativeClosestPoint () {}
+      ~IterativeClosestPoint () {}
 
       /** \brief Returns a pointer to the DefaultConvergenceCriteria used by the IterativeClosestPoint class.
         * This allows to check the convergence state after the align() method as well as to configure
@@ -173,32 +173,32 @@ namespace pcl
         *
         * \param[in] cloud the input point cloud source
         */
-      virtual void
-      setInputSource (const PointCloudSourceConstPtr &cloud)
+      void
+      setInputSource (const PointCloudSourceConstPtr &cloud) override
       {
         Registration<PointSource, PointTarget, Scalar>::setInputSource (cloud);
         std::vector<pcl::PCLPointField> fields;
         pcl::getFields (*cloud, fields);
         source_has_normals_ = false;
-        for (size_t i = 0; i < fields.size (); ++i)
+        for (const auto &field : fields)
         {
-          if      (fields[i].name == "x") x_idx_offset_ = fields[i].offset;
-          else if (fields[i].name == "y") y_idx_offset_ = fields[i].offset;
-          else if (fields[i].name == "z") z_idx_offset_ = fields[i].offset;
-          else if (fields[i].name == "normal_x") 
+          if      (field.name == "x") x_idx_offset_ = field.offset;
+          else if (field.name == "y") y_idx_offset_ = field.offset;
+          else if (field.name == "z") z_idx_offset_ = field.offset;
+          else if (field.name == "normal_x") 
           {
             source_has_normals_ = true;
-            nx_idx_offset_ = fields[i].offset;
+            nx_idx_offset_ = field.offset;
           }
-          else if (fields[i].name == "normal_y") 
+          else if (field.name == "normal_y") 
           {
             source_has_normals_ = true;
-            ny_idx_offset_ = fields[i].offset;
+            ny_idx_offset_ = field.offset;
           }
-          else if (fields[i].name == "normal_z") 
+          else if (field.name == "normal_z") 
           {
             source_has_normals_ = true;
-            nz_idx_offset_ = fields[i].offset;
+            nz_idx_offset_ = field.offset;
           }
         }
       }
@@ -208,16 +208,16 @@ namespace pcl
         *
         * \param[in] cloud the input point cloud target
         */
-      virtual void
-      setInputTarget (const PointCloudTargetConstPtr &cloud)
+      void
+      setInputTarget (const PointCloudTargetConstPtr &cloud) override
       {
         Registration<PointSource, PointTarget, Scalar>::setInputTarget (cloud);
         std::vector<pcl::PCLPointField> fields;
         pcl::getFields (*cloud, fields);
         target_has_normals_ = false;
-        for (size_t i = 0; i < fields.size (); ++i)
+        for (const auto &field : fields)
         {
-          if (fields[i].name == "normal_x" || fields[i].name == "normal_y" || fields[i].name == "normal_z") 
+          if (field.name == "normal_x" || field.name == "normal_y" || field.name == "normal_z") 
           {
             target_has_normals_ = true;
             break;
@@ -260,8 +260,8 @@ namespace pcl
         * \param output the transformed input point cloud dataset using the rigid transformation found
         * \param guess the initial guess of the transformation to compute
         */
-      virtual void 
-      computeTransformation (PointCloudSource &output, const Matrix4 &guess);
+      void 
+      computeTransformation (PointCloudSource &output, const Matrix4 &guess) override;
 
       /** \brief Looks at the Estimators and Rejectors and determines whether their blob-setter methods need to be called */
       virtual void
@@ -296,16 +296,16 @@ namespace pcl
   class IterativeClosestPointWithNormals : public IterativeClosestPoint<PointSource, PointTarget, Scalar>
   {
     public:
-      typedef typename IterativeClosestPoint<PointSource, PointTarget, Scalar>::PointCloudSource PointCloudSource;
-      typedef typename IterativeClosestPoint<PointSource, PointTarget, Scalar>::PointCloudTarget PointCloudTarget;
-      typedef typename IterativeClosestPoint<PointSource, PointTarget, Scalar>::Matrix4 Matrix4;
+      using PointCloudSource = typename IterativeClosestPoint<PointSource, PointTarget, Scalar>::PointCloudSource;
+      using PointCloudTarget = typename IterativeClosestPoint<PointSource, PointTarget, Scalar>::PointCloudTarget;
+      using Matrix4 = typename IterativeClosestPoint<PointSource, PointTarget, Scalar>::Matrix4;
 
       using IterativeClosestPoint<PointSource, PointTarget, Scalar>::reg_name_;
       using IterativeClosestPoint<PointSource, PointTarget, Scalar>::transformation_estimation_;
       using IterativeClosestPoint<PointSource, PointTarget, Scalar>::correspondence_rejectors_;
 
-      typedef boost::shared_ptr<IterativeClosestPoint<PointSource, PointTarget, Scalar> > Ptr;
-      typedef boost::shared_ptr<const IterativeClosestPoint<PointSource, PointTarget, Scalar> > ConstPtr;
+      using Ptr = boost::shared_ptr<IterativeClosestPoint<PointSource, PointTarget, Scalar> >;
+      using ConstPtr = boost::shared_ptr<const IterativeClosestPoint<PointSource, PointTarget, Scalar> >;
 
       /** \brief Empty constructor. */
       IterativeClosestPointWithNormals () 

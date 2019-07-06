@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include <flann/flann.h>
+#include <flann/flann.hpp>
+
 #include <pcl/common/common.h>
 #include <pcl/apps/3d_rec_framework/pc_source/source.h>
 #include <pcl/apps/3d_rec_framework/feature_wrapper/global/global_estimator.h>
@@ -20,7 +21,7 @@ namespace pcl
     template<typename PointInT>
     class PCL_EXPORTS GlobalClassifier {
       public:
-      typedef typename pcl::PointCloud<PointInT>::Ptr PointInTPtr;
+      using PointInTPtr = typename pcl::PointCloud<PointInT>::Ptr;
 
       virtual void
       setNN (int nn) = 0;
@@ -72,9 +73,9 @@ namespace pcl
           }
         } sortIndexScoresOp;
 
-        typedef typename pcl::PointCloud<PointInT>::Ptr PointInTPtr;
-        typedef Distance<float> DistT;
-        typedef Model<PointInT> ModelT;
+        using PointInTPtr = typename pcl::PointCloud<PointInT>::Ptr;
+        using DistT = Distance<float>;
+        using ModelT = Model<PointInT>;
 
         /** \brief Directory where the trained structure will be saved */
         std::string training_dir_;
@@ -91,7 +92,7 @@ namespace pcl
         /** \brief Descriptor name */
         std::string descr_name_;
 
-        typedef std::pair<ModelT, std::vector<float> > flann_model;
+        using flann_model = std::pair<ModelT, std::vector<float> >;
         flann::Matrix<float> flann_data_;
         flann::Index<DistT> * flann_index_;
         std::vector<flann_model> flann_models_;
@@ -140,19 +141,19 @@ namespace pcl
         }
 
         void
-        setNN (int nn)
+        setNN (int nn) override
         {
           NN_ = nn;
         }
 
         void
-        getCategory (std::vector<std::string> & categories)
+        getCategory (std::vector<std::string> & categories) override
         {
           categories = categories_;
         }
 
         void
-        getConfidence (std::vector<float> & conf)
+        getConfidence (std::vector<float> & conf) override
         {
           conf = confidences_;
         }
@@ -169,7 +170,7 @@ namespace pcl
          */
 
         void
-        classify ();
+        classify () override;
 
         /**
          * \brief Sets the model data source_
@@ -191,7 +192,7 @@ namespace pcl
         }
 
         void
-        setIndices (std::vector<int> & indices)
+        setIndices (std::vector<int> & indices) override
         {
           indices_ = indices;
         }
@@ -200,7 +201,7 @@ namespace pcl
          * \brief Sets the input cloud to be classified
          */
         void
-        setInputCloud (const PointInTPtr & cloud)
+        setInputCloud (const PointInTPtr & cloud) override
         {
           input_ = cloud;
         }

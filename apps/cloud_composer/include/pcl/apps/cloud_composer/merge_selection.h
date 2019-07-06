@@ -47,14 +47,14 @@ namespace pcl
     {
       Q_OBJECT
       public:
-        MergeSelection (QMap <const CloudItem*, pcl::PointIndices::ConstPtr > selected_item_index_map, QObject* parent = 0);
-        virtual ~MergeSelection ();
+        MergeSelection (QMap <const CloudItem*, pcl::PointIndices::ConstPtr > selected_item_index_map, QObject* parent = nullptr);
+        ~MergeSelection ();
         
-        virtual QList <CloudComposerItem*>
-        performAction (QList <const CloudComposerItem*> input_data, PointTypeFlags::PointType type = PointTypeFlags::NONE);
+        QList <CloudComposerItem*>
+        performAction (QList <const CloudComposerItem*> input_data, PointTypeFlags::PointType type = PointTypeFlags::NONE) override;
         
-        inline virtual QString
-        getToolName () const { return "Merge Selection Tool";}
+        inline QString
+        getToolName () const override { return "Merge Selection Tool";}
         
         QList <const CloudItem*>
         getSelectedItems () { return selected_item_index_map_.keys ();}

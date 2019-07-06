@@ -93,12 +93,12 @@ namespace pcl
   class SIFTKeypoint : public Keypoint<PointInT, PointOutT>
   {
     public:
-      typedef boost::shared_ptr<SIFTKeypoint<PointInT, PointOutT> > Ptr;
-      typedef boost::shared_ptr<const SIFTKeypoint<PointInT, PointOutT> > ConstPtr;
+      using Ptr = boost::shared_ptr<SIFTKeypoint<PointInT, PointOutT> >;
+      using ConstPtr = boost::shared_ptr<const SIFTKeypoint<PointInT, PointOutT> >;
 
-      typedef typename Keypoint<PointInT, PointOutT>::PointCloudIn PointCloudIn;
-      typedef typename Keypoint<PointInT, PointOutT>::PointCloudOut PointCloudOut;
-      typedef typename Keypoint<PointInT, PointOutT>::KdTree KdTree;
+      using PointCloudIn = typename Keypoint<PointInT, PointOutT>::PointCloudIn;
+      using PointCloudOut = typename Keypoint<PointInT, PointOutT>::PointCloudOut;
+      using KdTree = typename Keypoint<PointInT, PointOutT>::KdTree;
 
       using Keypoint<PointInT, PointOutT>::name_;
       using Keypoint<PointInT, PointOutT>::input_;
@@ -110,7 +110,7 @@ namespace pcl
       /** \brief Empty constructor. */
       SIFTKeypoint () : min_scale_ (0.0), nr_octaves_ (0), nr_scales_per_octave_ (0), 
         min_contrast_ (-std::numeric_limits<float>::max ()), scale_idx_ (-1), 
-        out_fields_ (), getFieldValue_ ()
+        getFieldValue_ ()
       {
         name_ = "SIFTKeypoint";
       }
@@ -131,14 +131,14 @@ namespace pcl
 
     protected:
       bool
-      initCompute ();
+      initCompute () override;
 
       /** \brief Detect the SIFT keypoints for a set of points given in setInputCloud () using the spatial locator in 
         * setSearchMethod ().
         * \param output the resultant cloud of keypoints
         */
       void 
-      detectKeypoints (PointCloudOut &output);
+      detectKeypoints (PointCloudOut &output) override;
 
     private:
       /** \brief Detect the SIFT keypoints for a given point cloud for a single octave.

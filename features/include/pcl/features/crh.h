@@ -60,8 +60,8 @@ namespace pcl
   class CRHEstimation : public FeatureFromNormals<PointInT, PointNT, PointOutT>
   {
     public:
-      typedef boost::shared_ptr<CRHEstimation<PointInT, PointNT, PointOutT> > Ptr;
-      typedef boost::shared_ptr<const CRHEstimation<PointInT, PointNT, PointOutT> > ConstPtr;
+      using Ptr = boost::shared_ptr<CRHEstimation<PointInT, PointNT, PointOutT> >;
+      using ConstPtr = boost::shared_ptr<const CRHEstimation<PointInT, PointNT, PointOutT> >;
 
       using Feature<PointInT, PointOutT>::feature_name_;
       using Feature<PointInT, PointOutT>::getClassName;
@@ -71,7 +71,7 @@ namespace pcl
       using Feature<PointInT, PointOutT>::surface_;
       using FeatureFromNormals<PointInT, PointNT, PointOutT>::normals_;
 
-      typedef typename Feature<PointInT, PointOutT>::PointCloudOut PointCloudOut;
+      using PointCloudOut = typename Feature<PointInT, PointOutT>::PointCloudOut;
 
       /** \brief Constructor. */
       CRHEstimation () :
@@ -133,7 +133,7 @@ namespace pcl
        * \param[out] output the resultant point cloud with a CRH histogram
        */
       void
-      computeFeature (PointCloudOut &output);
+      computeFeature (PointCloudOut &output) override;
   };
 }
 

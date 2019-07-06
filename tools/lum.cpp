@@ -49,12 +49,12 @@
 
 #include <vector>
 
-typedef pcl::PointXYZ PointType;
-typedef pcl::PointCloud<PointType> Cloud;
-typedef Cloud::ConstPtr CloudConstPtr;
-typedef Cloud::Ptr CloudPtr;
-typedef std::pair<std::string, CloudPtr> CloudPair;
-typedef std::vector<CloudPair> CloudVector;
+using PointType = pcl::PointXYZ;
+using Cloud = pcl::PointCloud<PointType>;
+using CloudConstPtr = Cloud::ConstPtr;
+using CloudPtr = Cloud::Ptr;
+using CloudPair = std::pair<std::string, CloudPtr>;
+using CloudVector = std::vector<CloudPair>;
 
 int
 main (int argc, char **argv)
@@ -129,7 +129,7 @@ main (int argc, char **argv)
   for(size_t i = 0; i < lum.getNumVertices (); i++)
   {
     std::string result_filename (clouds[i].first);
-    result_filename = result_filename.substr (result_filename.rfind ("/") + 1);
+    result_filename = result_filename.substr (result_filename.rfind ('/') + 1);
     pcl::io::savePCDFileBinary (result_filename.c_str (), *(clouds[i].second));
     //std::cout << "saving result to " << result_filename << std::endl;
   }

@@ -54,11 +54,11 @@ namespace pcl
   template<typename PointT>
   class ProgressiveSampleConsensus : public SampleConsensus<PointT>
   {
-    typedef typename SampleConsensusModel<PointT>::Ptr SampleConsensusModelPtr;
+    using SampleConsensusModelPtr = typename SampleConsensusModel<PointT>::Ptr;
 
     public:
-      typedef boost::shared_ptr<ProgressiveSampleConsensus> Ptr;
-      typedef boost::shared_ptr<const ProgressiveSampleConsensus> ConstPtr;
+      using Ptr = boost::shared_ptr<ProgressiveSampleConsensus>;
+      using ConstPtr = boost::shared_ptr<const ProgressiveSampleConsensus>;
 
       using SampleConsensus<PointT>::max_iterations_;
       using SampleConsensus<PointT>::threshold_;
@@ -94,7 +94,7 @@ namespace pcl
         * \param[in] debug_verbosity_level enable/disable on-screen debug information and set the verbosity level
         */
       bool 
-      computeModel (int debug_verbosity_level = 0);
+      computeModel (int debug_verbosity_level = 0) override;
   };
 }
 

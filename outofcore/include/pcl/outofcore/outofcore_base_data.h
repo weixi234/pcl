@@ -96,6 +96,8 @@ namespace pcl
     class PCL_EXPORTS OutofcoreOctreeBaseMetadata : public OutofcoreAbstractMetadata
     {
       public:
+        using Ptr = boost::shared_ptr<OutofcoreOctreeBaseMetadata>;
+
         /** \brief Empty constructor */
         OutofcoreOctreeBaseMetadata ();
         /** \brief Load metadata from disk 
@@ -124,16 +126,16 @@ namespace pcl
         setMetadataFilename (const boost::filesystem::path& path_to_metadata);
                 
         /** \brief Writes the data to a JSON file located at \ref metadata_filename_ */
-        virtual void 
-        serializeMetadataToDisk ();
+        void 
+        serializeMetadataToDisk () override;
 
         /** \brief Loads the data from a JSON file located at \ref metadata_filename_ */
         virtual int
         loadMetadataFromDisk ();
         /** \brief Loads the data from a JSON file located at \ref metadata_filename_ */
         
-        virtual int
-        loadMetadataFromDisk (const boost::filesystem::path& path_to_metadata);
+        int
+        loadMetadataFromDisk (const boost::filesystem::path& path_to_metadata) override;
 
         /** \brief Returns the name of the tree; this is not the same as the filename */
         virtual std::string
@@ -213,8 +215,8 @@ namespace pcl
         std::vector<boost::uint64_t> LOD_num_points_;
 
         /** \brief Writes the JSON metadata to a string */
-        virtual void
-        writeMetadataString (std::vector<char>& buf);
+        void
+        writeMetadataString (std::vector<char>& buf) override;
     };
   }//namespace outofcore
 }//namespace pcl

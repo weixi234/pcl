@@ -71,8 +71,8 @@ namespace pcl
       bool trivial_;
 
     public:
-      typedef boost::shared_ptr<PointRepresentation<PointT> > Ptr;
-      typedef boost::shared_ptr<const PointRepresentation<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<PointRepresentation<PointT> >;
+      using ConstPtr = boost::shared_ptr<const PointRepresentation<PointT> >;
 
       /** \brief Empty constructor */
       PointRepresentation () : nr_dimensions_ (0), alpha_ (0), trivial_ (false) {}
@@ -109,7 +109,7 @@ namespace pcl
 
           for (int i = 0; i < nr_dimensions_; ++i)
           {
-            if (!pcl_isfinite (temp[i]))
+            if (!std::isfinite (temp[i]))
             {
               is_valid = false;
               break;
@@ -123,7 +123,7 @@ namespace pcl
 
           for (int i = 0; i < nr_dimensions_; ++i)
           {
-            if (!pcl_isfinite (temp[i]))
+            if (!std::isfinite (temp[i]))
             {
               is_valid = false;
               break;
@@ -182,8 +182,8 @@ namespace pcl
 
     public:
       // Boost shared pointers
-      typedef boost::shared_ptr<DefaultPointRepresentation<PointDefault> > Ptr;
-      typedef boost::shared_ptr<const DefaultPointRepresentation<PointDefault> > ConstPtr;
+      using Ptr = boost::shared_ptr<DefaultPointRepresentation<PointDefault> >;
+      using ConstPtr = boost::shared_ptr<const DefaultPointRepresentation<PointDefault> >;
 
       DefaultPointRepresentation ()
       {
@@ -195,7 +195,7 @@ namespace pcl
         trivial_ = true;
       }
 
-      virtual ~DefaultPointRepresentation () {}
+      ~DefaultPointRepresentation () {}
 
       inline Ptr
       makeShared () const
@@ -203,8 +203,8 @@ namespace pcl
         return (Ptr (new DefaultPointRepresentation<PointDefault> (*this)));
       }
 
-      virtual void
-      copyToFloatArray (const PointDefault &p, float * out) const
+      void
+      copyToFloatArray (const PointDefault &p, float * out) const override
       {
         // If point type is unknown, treat it as a struct/array of floats
         const float* ptr = reinterpret_cast<const float*> (&p);
@@ -242,14 +242,14 @@ namespace pcl
 
     struct NdCopyPointFunctor
     {
-      typedef typename traits::POD<PointDefault>::type Pod;
+      using Pod = typename traits::POD<PointDefault>::type;
 
       NdCopyPointFunctor (const PointDefault &p1, float * p2)
         : p1_ (reinterpret_cast<const Pod&>(p1)), p2_ (p2), f_idx_ (0) { }
 
       template<typename Key> inline void operator() ()
       {
-        typedef typename pcl::traits::datatype<PointDefault, Key>::type FieldT;
+        using FieldT = typename pcl::traits::datatype<PointDefault, Key>::type;
         const int NrDims = pcl::traits::datatype<PointDefault, Key>::size;
         Helper<Key, FieldT, NrDims>::copyPoint (p1_, p2_, f_idx_);
       }
@@ -290,9 +290,9 @@ namespace pcl
 
     public:
       // Boost shared pointers
-      typedef typename boost::shared_ptr<DefaultFeatureRepresentation<PointDefault> > Ptr;
-      typedef typename boost::shared_ptr<const DefaultFeatureRepresentation<PointDefault> > ConstPtr;
-      typedef typename pcl::traits::fieldList<PointDefault>::type FieldList;
+      using Ptr = typename boost::shared_ptr<DefaultFeatureRepresentation<PointDefault> >;
+      using ConstPtr = typename boost::shared_ptr<const DefaultFeatureRepresentation<PointDefault> >;
+      using FieldList = typename pcl::traits::fieldList<PointDefault>::type;
 
       DefaultFeatureRepresentation ()
       {
@@ -306,8 +306,8 @@ namespace pcl
         return (Ptr (new DefaultFeatureRepresentation<PointDefault> (*this)));
       }
 
-      virtual void
-      copyToFloatArray (const PointDefault &p, float * out) const
+      void
+      copyToFloatArray (const PointDefault &p, float * out) const override
       {
         pcl::for_each_type <FieldList> (NdCopyPointFunctor (p, out));
       }
@@ -324,8 +324,8 @@ namespace pcl
         trivial_ = true;
       }
 
-      virtual void
-      copyToFloatArray (const PointXYZ &p, float * out) const
+      void
+      copyToFloatArray (const PointXYZ &p, float * out) const override
       {
         out[0] = p.x;
         out[1] = p.y;
@@ -344,8 +344,8 @@ namespace pcl
         trivial_ = true;
       }
 
-      virtual void
-      copyToFloatArray (const PointXYZI &p, float * out) const
+      void
+      copyToFloatArray (const PointXYZI &p, float * out) const override
       {
         out[0] = p.x;
         out[1] = p.y;
@@ -365,8 +365,8 @@ namespace pcl
         trivial_ = true;
       }
 
-      virtual void
-      copyToFloatArray (const PointNormal &p, float * out) const
+      void
+      copyToFloatArray (const PointNormal &p, float * out) const override
       {
         out[0] = p.x;
         out[1] = p.y;
@@ -395,8 +395,8 @@ namespace pcl
         trivial_ = true;
       }
 
-      virtual void
-      copyToFloatArray (const PPFSignature &p, float * out) const
+      void
+      copyToFloatArray (const PPFSignature &p, float * out) const override
       {
         out[0] = p.f1;
         out[1] = p.f2;
@@ -441,8 +441,8 @@ namespace pcl
         trivial_=false;
       }
 
-      virtual void
-      copyToFloatArray (const Narf36 &p, float * out) const
+      void
+      copyToFloatArray (const Narf36 &p, float * out) const override
       {
         for (int i = 0; i < nr_dimensions_; ++i)
           out[i] = p.descriptor[i];
@@ -463,8 +463,8 @@ namespace pcl
         nr_dimensions_ = 1980;
       }
 
-      virtual void
-      copyToFloatArray (const ShapeContext1980 &p, float * out) const
+      void
+      copyToFloatArray (const ShapeContext1980 &p, float * out) const override
       {
         for (int i = 0; i < nr_dimensions_; ++i)
           out[i] = p.descriptor[i];
@@ -481,8 +481,8 @@ namespace pcl
         nr_dimensions_ = 1960;
       }
 
-      virtual void
-      copyToFloatArray (const UniqueShapeContext1960 &p, float * out) const
+      void
+      copyToFloatArray (const UniqueShapeContext1960 &p, float * out) const override
       {
         for (int i = 0; i < nr_dimensions_; ++i)
           out[i] = p.descriptor[i];
@@ -499,8 +499,8 @@ namespace pcl
         nr_dimensions_ = 352;
       }
 
-      virtual void
-      copyToFloatArray (const SHOT352 &p, float * out) const
+      void
+      copyToFloatArray (const SHOT352 &p, float * out) const override
       {
         for (int i = 0; i < nr_dimensions_; ++i)
           out[i] = p.descriptor[i];
@@ -517,8 +517,8 @@ namespace pcl
         nr_dimensions_ = 1344;
       }
 
-      virtual void
-      copyToFloatArray (const SHOT1344 &p, float * out) const
+      void
+      copyToFloatArray (const SHOT1344 &p, float * out) const override
       {
         for (int i = 0; i < nr_dimensions_; ++i)
           out[i] = p.descriptor[i];
@@ -536,8 +536,8 @@ namespace pcl
 
     public:
       // Boost shared pointers
-      typedef boost::shared_ptr<CustomPointRepresentation<PointDefault> > Ptr;
-      typedef boost::shared_ptr<const CustomPointRepresentation<PointDefault> > ConstPtr;
+      using Ptr = boost::shared_ptr<CustomPointRepresentation<PointDefault> >;
+      using ConstPtr = boost::shared_ptr<const CustomPointRepresentation<PointDefault> >;
 
       /** \brief Constructor
         * \param[in] max_dim the maximum number of dimensions to use

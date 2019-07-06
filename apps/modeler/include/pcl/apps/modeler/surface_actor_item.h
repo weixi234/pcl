@@ -48,37 +48,37 @@ namespace pcl
     class SurfaceActorItem : public ChannelActorItem
     {
       public:
-        typedef pcl::visualization::PointCloudGeometryHandler<pcl::PointSurfel> GeometryHandler;
-        typedef GeometryHandler::Ptr GeometryHandlerPtr;
-        typedef GeometryHandler::ConstPtr GeometryHandlerConstPtr;
+        using GeometryHandler = pcl::visualization::PointCloudGeometryHandler<pcl::PointSurfel>;
+        using GeometryHandlerPtr = GeometryHandler::Ptr;
+        using GeometryHandlerConstPtr = GeometryHandler::ConstPtr;
 
-        typedef pcl::visualization::PointCloudColorHandler<pcl::PointSurfel> ColorHandler;
-        typedef ColorHandler::Ptr ColorHandlerPtr;
-        typedef ColorHandler::ConstPtr ColorHandlerConstPtr;
+        using ColorHandler = pcl::visualization::PointCloudColorHandler<pcl::PointSurfel>;
+        using ColorHandlerPtr = ColorHandler::Ptr;
+        using ColorHandlerConstPtr = ColorHandler::ConstPtr;
 
         SurfaceActorItem(QTreeWidgetItem* parent,
-                        const boost::shared_ptr<CloudMesh>& cloud_mesh,
+                        const CloudMesh::Ptr& cloud_mesh,
                         const vtkSmartPointer<vtkRenderWindow>& render_window);
         ~SurfaceActorItem ();
 
-        virtual std::string
-        getItemName() const {return "Points Actor Item";}
+        std::string
+        getItemName() const override {return "Points Actor Item";}
 
       protected:
-        virtual void
-        initImpl();
+        void
+        initImpl() override;
 
-        virtual void
-        updateImpl();
+        void
+        updateImpl() override;
 
-        virtual void
-        prepareContextMenu(QMenu* menu) const;
+        void
+        prepareContextMenu(QMenu* menu) const override;
 
-        virtual void
-        prepareProperties(ParameterDialog* parameter_dialog);
+        void
+        prepareProperties(ParameterDialog* parameter_dialog) override;
 
-        virtual void
-        setProperties();
+        void
+        setProperties() override;
 
       private:
     };

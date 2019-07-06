@@ -37,8 +37,9 @@
 
 #pragma once
 
-#include <pcl/apps/cloud_composer/qt.h>
 #include <pcl/apps/cloud_composer/items/cloud_item.h>
+
+#include <QUndoCommand>
 
 namespace pcl
 {
@@ -57,19 +58,19 @@ namespace pcl
     class CloudCommand : public QUndoCommand
     {
       public: 
-        CloudCommand (ConstItemList input_data, QUndoCommand* parent = 0);
+        CloudCommand (ConstItemList input_data, QUndoCommand* parent = nullptr);
         
-        virtual
+        
         ~CloudCommand ();
         
         virtual bool
         runCommand (AbstractTool* tool) = 0;
 
-        virtual void 
-        undo ()  = 0;
+        void 
+        undo ()  override = 0;
         
-        virtual void
-        redo () = 0;
+        void
+        redo () override = 0;
         
         //QList <CloudComposerItem*> 
        // executeToolOnTemplateCloud (AbstractTool* tool, ConstItemList &input_data);
@@ -120,16 +121,16 @@ namespace pcl
     class ModifyItemCommand : public CloudCommand
     {
       public: 
-        ModifyItemCommand (ConstItemList input_data, QUndoCommand* parent = 0);
+        ModifyItemCommand (ConstItemList input_data, QUndoCommand* parent = nullptr);
     
-        virtual bool
-        runCommand (AbstractTool* tool);
+        bool
+        runCommand (AbstractTool* tool) override;
         
-        virtual void
-        undo ();
+        void
+        undo () override;
       
-        virtual void
-        redo ();
+        void
+        redo () override;
       private: 
         
       
@@ -139,16 +140,16 @@ namespace pcl
     class NewItemCloudCommand : public CloudCommand
     {
       public: 
-        NewItemCloudCommand (ConstItemList input_data, QUndoCommand* parent = 0);
+        NewItemCloudCommand (ConstItemList input_data, QUndoCommand* parent = nullptr);
       
-        virtual bool
-        runCommand (AbstractTool* tool);
+        bool
+        runCommand (AbstractTool* tool) override;
         
-        virtual void
-        undo ();
+        void
+        undo () override;
       
-        virtual void
-        redo ();
+        void
+        redo () override;
 
     };
     
@@ -156,16 +157,16 @@ namespace pcl
     class SplitCloudCommand : public CloudCommand
     {
       public: 
-        SplitCloudCommand (ConstItemList input_data, QUndoCommand* parent = 0);
+        SplitCloudCommand (ConstItemList input_data, QUndoCommand* parent = nullptr);
       
-        virtual bool
-        runCommand (AbstractTool* tool);
+        bool
+        runCommand (AbstractTool* tool) override;
         
-        virtual void
-        undo ();
+        void
+        undo () override;
       
-        virtual void
-        redo ();
+        void
+        redo () override;
       private:
 
     };  
@@ -173,16 +174,16 @@ namespace pcl
     class DeleteItemCommand : public CloudCommand
     {
       public: 
-        DeleteItemCommand (ConstItemList input_data, QUndoCommand* parent = 0);
+        DeleteItemCommand (ConstItemList input_data, QUndoCommand* parent = nullptr);
       
-        virtual bool
-        runCommand (AbstractTool* tool);
+        bool
+        runCommand (AbstractTool* tool) override;
         
-        virtual void
-        undo ();
+        void
+        undo () override;
       
-        virtual void
-        redo ();
+        void
+        redo () override;
       private:
     };
     
@@ -193,16 +194,16 @@ namespace pcl
          *  \param[in] input_data Input list of CloudItem s from the project model which will be merged
          *  \param[in] temporary_clouds Input list of CloudItems which 
          */
-        MergeCloudCommand (ConstItemList input_data, QUndoCommand* parent = 0);
+        MergeCloudCommand (ConstItemList input_data, QUndoCommand* parent = nullptr);
       
-        virtual bool
-        runCommand (AbstractTool* tool);
+        bool
+        runCommand (AbstractTool* tool) override;
         
-        virtual void
-        undo ();
+        void
+        undo () override;
       
-        virtual void
-        redo ();
+        void
+        redo () override;
         
         inline void
         setSelectedIndicesMap( const QMap <CloudItem*, pcl::PointIndices::Ptr > selected_item_index_map)

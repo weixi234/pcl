@@ -57,38 +57,35 @@ pcl::people::PersonClassifier<PointT>::loadSVMFromFile (std::string svm_filename
   SVM_file.open(svm_filename.c_str());
 
   getline (SVM_file,line);      // read window_height line
-  size_t tok_pos = line.find_first_of(":", 0);  // search for token ":"
-  window_height_ = std::atoi(line.substr(tok_pos+1, line.npos - tok_pos-1).c_str());
+  size_t tok_pos = line.find_first_of(':', 0);  // search for token ":"
+  window_height_ = std::atoi(line.substr(tok_pos+1, std::string::npos - tok_pos-1).c_str());
 
   getline (SVM_file,line);      // read window_width line
-  tok_pos = line.find_first_of(":", 0);  // search for token ":"
-  window_width_ = std::atoi(line.substr(tok_pos+1, line.npos - tok_pos-1).c_str());
+  tok_pos = line.find_first_of(':', 0);  // search for token ":"
+  window_width_ = std::atoi(line.substr(tok_pos+1, std::string::npos - tok_pos-1).c_str());
 
   getline (SVM_file,line);      // read SVM_offset line
-  tok_pos = line.find_first_of(":", 0);  // search for token ":"
-  SVM_offset_ = std::atof(line.substr(tok_pos+1, line.npos - tok_pos-1).c_str());
+  tok_pos = line.find_first_of(':', 0);  // search for token ":"
+  SVM_offset_ = std::atof(line.substr(tok_pos+1, std::string::npos - tok_pos-1).c_str());
 
   getline (SVM_file,line);      // read SVM_weights line
-  tok_pos = line.find_first_of("[", 0);  // search for token "["
-  size_t tok_end_pos = line.find_first_of("]", 0);  // search for token "]" , end of SVM weights
+  tok_pos = line.find_first_of('[', 0);  // search for token "["
+  size_t tok_end_pos = line.find_first_of(']', 0);  // search for token "]" , end of SVM weights
   size_t prev_tok_pos;
   while (tok_pos < tok_end_pos) // while end of SVM_weights is not reached
   {
     prev_tok_pos = tok_pos;
-    tok_pos = line.find_first_of(",", prev_tok_pos+1);  // search for token ","
+    tok_pos = line.find_first_of(',', prev_tok_pos+1);  // search for token ","
     SVM_weights_.push_back(std::atof(line.substr(prev_tok_pos+1, tok_pos-prev_tok_pos-1).c_str()));
   }
   SVM_file.close();
   
-  if (SVM_weights_.size() == 0)
+  if (SVM_weights_.empty ())
   {
     PCL_ERROR ("[pcl::people::PersonClassifier::loadSVMFromFile] Invalid SVM file!\n");
     return (false);
   }
-  else
-  {
-    return (true);
-  }
+  return (true);
 }
 
 template <typename PointT> void
@@ -218,7 +215,7 @@ pcl::people::PersonClassifier<PointT>::evaluate (float height_person,
               float yc,
               PointCloudPtr& image)
 {
-  if (SVM_weights_.size() == 0)
+  if (SVM_weights_.empty ())
   {
   PCL_ERROR ("[pcl::people::PersonClassifier::evaluate] SVM has not been set!\n");
   return (-1000);
@@ -260,7 +257,7 @@ pcl::people::PersonClassifier<PointT>::evaluate (float height_person,
  
     // Calculate confidence value by dot product:
     confidence = 0.0;
-    for(unsigned int i = 0; i < SVM_weights_.size(); i++)
+    for(size_t i = 0; i < SVM_weights_.size(); i++)
     { 
       confidence += SVM_weights_[i] * descriptor[i];
     }
@@ -305,9 +302,6 @@ pcl::people::PersonClassifier<PointT>::evaluate (PointCloudPtr& image,
   {
     return (evaluate(pixel_height, pixel_xc, pixel_yc, image));
   }
-  else
-  {
-    return (evaluate(pixel_width, pixel_yc, image->height-pixel_xc+1, image));
-  }
+  return (evaluate(pixel_width, pixel_yc, image->height-pixel_xc+1, image));
 }
 #endif /* PCL_PEOPLE_PERSON_CLASSIFIER_HPP_ */

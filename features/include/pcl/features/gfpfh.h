@@ -64,8 +64,8 @@ namespace pcl
   class GFPFHEstimation : public FeatureFromLabels<PointInT, PointLT, PointOutT>
   {
     public:
-      typedef boost::shared_ptr<GFPFHEstimation<PointInT, PointLT, PointOutT> > Ptr;
-      typedef boost::shared_ptr<const GFPFHEstimation<PointInT, PointLT, PointOutT> > ConstPtr;
+      using Ptr = boost::shared_ptr<GFPFHEstimation<PointInT, PointLT, PointOutT> >;
+      using ConstPtr = boost::shared_ptr<const GFPFHEstimation<PointInT, PointLT, PointOutT> >;
       using FeatureFromLabels<PointInT, PointLT, PointOutT>::feature_name_;
       using FeatureFromLabels<PointInT, PointLT, PointOutT>::getClassName;
       using FeatureFromLabels<PointInT, PointLT, PointOutT>::indices_;
@@ -76,8 +76,8 @@ namespace pcl
       using FeatureFromLabels<PointInT, PointLT, PointOutT>::input_;
       using FeatureFromLabels<PointInT, PointLT, PointOutT>::labels_;
 
-      typedef typename Feature<PointInT, PointOutT>::PointCloudOut PointCloudOut;
-      typedef typename Feature<PointInT, PointOutT>::PointCloudIn  PointCloudIn;
+      using PointCloudOut = typename Feature<PointInT, PointOutT>::PointCloudOut;
+      using PointCloudIn = typename Feature<PointInT, PointOutT>::PointCloudIn;
 
       /** \brief Empty constructor. */
       GFPFHEstimation () : 
@@ -129,7 +129,7 @@ namespace pcl
         * \param output the resultant point cloud model dataset that contains the PFH feature estimates
         */
       void 
-      computeFeature (PointCloudOut &output);
+      computeFeature (PointCloudOut &output) override;
 
       /** \brief Return the dominant label of a set of points. */
       uint32_t

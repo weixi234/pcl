@@ -1,6 +1,8 @@
 #include <pcl/apps/cloud_composer/point_selectors/rectangular_frustum_selector.h>
 #include <pcl/apps/cloud_composer/point_selectors/selection_event.h>
 
+#include <QDebug>
+
 namespace pcl
 {
   namespace cloud_composer
@@ -10,7 +12,6 @@ namespace pcl
 }
 
 pcl::cloud_composer::RectangularFrustumSelector::RectangularFrustumSelector ()
-  : vtkInteractorStyleRubberBandPick ()
 {
   selection_complete_event_ = interactor_events::SELECTION_COMPLETE_EVENT;
 }
@@ -45,12 +46,10 @@ pcl::cloud_composer::RectangularFrustumSelector::OnLeftButtonUp ()
   
   vtkSmartPointer<vtkAppendPolyData> append = vtkAppendPolyData::New ();
   
-  pcl::visualization::CloudActorMap::iterator it;
-  it = actors_->begin ();
   QMap < QString, vtkPolyData* > id_selected_data_map;
-  for (it = actors_->begin (); it != actors_->end (); ++it)
+  for (const auto &actor : *actors_)
   {
-        pcl::visualization::CloudActor *act = &(*it).second;
+        const pcl::visualization::CloudActor *act = &actor.second;
         vtkMapper* mapper = act->actor->GetMapper ();
         vtkDataSet* data = mapper->GetInput ();
         vtkPolyData* poly_data = vtkPolyData::SafeDownCast (data);
@@ -62,7 +61,7 @@ pcl::cloud_composer::RectangularFrustumSelector::OnLeftButtonUp ()
         if (selected->GetNumberOfPoints() > 0)
         {
           qDebug () << "Selected " << selected->GetNumberOfPoints () << " points.";
-          id_selected_data_map.insert ( QString::fromStdString ((*it).first), selected);
+          id_selected_data_map.insert ( QString::fromStdString (actor.first), selected);
           append->AddInputData (selected);
         }
   }
@@ -78,7 +77,7 @@ pcl::cloud_composer::RectangularFrustumSelector::OnLeftButtonUp ()
 
   this->CurrentRenderer->AddActor (selected_actor);
   this->GetInteractor ()->GetRenderWindow ()->Render ();
-  this->HighlightProp (NULL);
+  this->HighlightProp (nullptr);
  
   if (all_points->GetNumberOfPoints () > 0)
   {

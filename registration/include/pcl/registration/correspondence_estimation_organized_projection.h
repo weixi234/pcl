@@ -39,6 +39,7 @@
 
 #pragma once
 
+#include <pcl/pcl_macros.h>
 #include <pcl/registration/correspondence_estimation.h>
 
 namespace pcl
@@ -68,16 +69,16 @@ namespace pcl
         using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::point_representation_;
         using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::target_cloud_updated_;
 
-        typedef pcl::PointCloud<PointSource> PointCloudSource;
-        typedef typename PointCloudSource::Ptr PointCloudSourcePtr;
-        typedef typename PointCloudSource::ConstPtr PointCloudSourceConstPtr;
+        using PointCloudSource = pcl::PointCloud<PointSource>;
+        using PointCloudSourcePtr = typename PointCloudSource::Ptr;
+        using PointCloudSourceConstPtr = typename PointCloudSource::ConstPtr;
 
-        typedef pcl::PointCloud<PointTarget> PointCloudTarget;
-        typedef typename PointCloudTarget::Ptr PointCloudTargetPtr;
-        typedef typename PointCloudTarget::ConstPtr PointCloudTargetConstPtr;
+        using PointCloudTarget = pcl::PointCloud<PointTarget>;
+        using PointCloudTargetPtr = typename PointCloudTarget::Ptr;
+        using PointCloudTargetConstPtr = typename PointCloudTarget::ConstPtr;
 
-        typedef boost::shared_ptr< CorrespondenceEstimationOrganizedProjection<PointSource, PointTarget, Scalar> > Ptr;
-        typedef boost::shared_ptr< const CorrespondenceEstimationOrganizedProjection<PointSource, PointTarget, Scalar> > ConstPtr;
+        using Ptr = boost::shared_ptr< CorrespondenceEstimationOrganizedProjection<PointSource, PointTarget, Scalar> >;
+        using ConstPtr = boost::shared_ptr< const CorrespondenceEstimationOrganizedProjection<PointSource, PointTarget, Scalar> >;
 
 
 
@@ -177,7 +178,7 @@ namespace pcl
         determineReciprocalCorrespondences (Correspondences &correspondences, double max_distance);
         
         /** \brief Clone and cast to CorrespondenceEstimationBase */
-        virtual boost::shared_ptr< CorrespondenceEstimationBase<PointSource, PointTarget, Scalar> > 
+        virtual typename CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::Ptr
         clone () const
         {
           Ptr copy (new CorrespondenceEstimationOrganizedProjection<PointSource, PointTarget, Scalar> (*this));
@@ -198,7 +199,7 @@ namespace pcl
         Eigen::Matrix3f projection_matrix_;
 
       public:
-        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+        PCL_MAKE_ALIGNED_OPERATOR_NEW
     };
   }
 }

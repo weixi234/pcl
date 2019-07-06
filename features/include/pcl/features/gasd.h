@@ -78,8 +78,8 @@ namespace pcl
     public:
       using typename Feature<PointInT, PointOutT>::PointCloudIn;
       using typename Feature<PointInT, PointOutT>::PointCloudOut;
-      typedef boost::shared_ptr<GASDEstimation<PointInT, PointOutT> > Ptr;
-      typedef boost::shared_ptr<const GASDEstimation<PointInT, PointOutT> > ConstPtr;
+      using Ptr = boost::shared_ptr<GASDEstimation<PointInT, PointOutT> >;
+      using ConstPtr = boost::shared_ptr<const GASDEstimation<PointInT, PointOutT> >;
 
       /** \brief Constructor.
        * \param[in] view_direction view direction
@@ -197,7 +197,7 @@ namespace pcl
        * \param[out] output the resultant point cloud model dataset containing the GASD feature
        */
       void
-      computeFeature (PointCloudOut &output);
+      computeFeature (PointCloudOut &output) override;
 
     private:
       /** \brief Transform that aligns the point cloud to the canonical coordinate system. */
@@ -259,8 +259,8 @@ namespace pcl
   {
     public:
       using typename Feature<PointInT, PointOutT>::PointCloudOut;
-      typedef boost::shared_ptr<GASDColorEstimation<PointInT, PointOutT> > Ptr;
-      typedef boost::shared_ptr<const GASDColorEstimation<PointInT, PointOutT> > ConstPtr;
+      using Ptr = boost::shared_ptr<GASDColorEstimation<PointInT, PointOutT> >;
+      using ConstPtr = boost::shared_ptr<const GASDColorEstimation<PointInT, PointOutT> >;
 
       /** \brief Constructor.
        * \param[in] view_direction view direction
@@ -354,7 +354,7 @@ namespace pcl
        * \param[out] output the resultant point cloud model dataset containing the GASD color feature
        */
       void
-      computeFeature (PointCloudOut &output);
+      computeFeature (PointCloudOut &output) override;
   };
 }  // namespace pcl
 

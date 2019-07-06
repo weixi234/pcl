@@ -36,9 +36,43 @@
 
 #pragma once
 
-#include <pcl/pcl_config.h>
-#include <boost/cstdint.hpp>
+/**
+ * \file pcl/pcl_macros.h
+ *
+ * \brief Defines all the PCL and non-PCL macros used
+ * \ingroup common
+ */
+
+#if defined __INTEL_COMPILER
+  #pragma warning disable 2196 2536 279
+#endif
+
+#if defined _MSC_VER
+  // 4244 : conversion from 'type1' to 'type2', possible loss of data
+  // 4661 : no suitable definition provided for explicit template instantiation reques
+  // 4503 : decorated name length exceeded, name was truncated
+  // 4146 : unary minus operator applied to unsigned type, result still unsigned
+  #pragma warning (disable: 4018 4244 4267 4521 4251 4661 4305 4503 4146)
+#endif
+
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
+#include <cmath>
+#include <cstdarg>
+#include <cstdio>
 #include <cstdlib>
+#include <iostream>
+
+#include <boost/cstdint.hpp>
+
+//Eigen has an enum that clashes with X11 Success define, which is ultimately included by pcl
+#ifdef Success
+  #undef Success
+#endif
+#include <Eigen/Core>
+
+#include <pcl/pcl_config.h>
 
 namespace pcl
 {
@@ -53,38 +87,26 @@ namespace pcl
   using boost::int_fast16_t;
 }
 
-#if defined __INTEL_COMPILER
-  #pragma warning disable 2196 2536 279
-#endif
-
-#if defined _MSC_VER
-  // 4244 : conversion from 'type1' to 'type2', possible loss of data
-  // 4661 : no suitable definition provided for explicit template instantiation reques
-  // 4503 : decorated name length exceeded, name was truncated
-  // 4146 : unary minus operator applied to unsigned type, result still unsigned
-  #pragma warning (disable: 4018 4244 4267 4521 4251 4661 4305 4503 4146)
-#endif
-
-#include <iostream>
-#include <stdarg.h>
-#include <stdio.h>
-#ifndef _USE_MATH_DEFINES
-#define _USE_MATH_DEFINES
-#endif
-#include <math.h>
-
-// MSCV doesn't have std::{isnan,isfinite}
 #if defined _WIN32 && defined _MSC_VER
 
-// If M_PI is not defined, then probably all of them are undefined
-#ifndef M_PI
+// Define math constants, without including math.h, to prevent polluting global namespace with old math methods
 // Copied from math.h
-# define M_PI   3.14159265358979323846     // pi
-# define M_PI_2    1.57079632679489661923  // pi/2
-# define M_PI_4    0.78539816339744830962  // pi/4
-# define M_PIl   3.1415926535897932384626433832795029L  // pi
-# define M_PI_2l 1.5707963267948966192313216916397514L  // pi/2
-# define M_PI_4l 0.7853981633974483096156608458198757L  // pi/4
+#ifndef _MATH_DEFINES_DEFINED
+  #define _MATH_DEFINES_DEFINED
+
+  #define M_E        2.71828182845904523536   // e
+  #define M_LOG2E    1.44269504088896340736   // log2(e)
+  #define M_LOG10E   0.434294481903251827651  // log10(e)
+  #define M_LN2      0.693147180559945309417  // ln(2)
+  #define M_LN10     2.30258509299404568402   // ln(10)
+  #define M_PI       3.14159265358979323846   // pi
+  #define M_PI_2     1.57079632679489661923   // pi/2
+  #define M_PI_4     0.785398163397448309616  // pi/4
+  #define M_1_PI     0.318309886183790671538  // 1/pi
+  #define M_2_PI     0.636619772367581343076  // 2/pi
+  #define M_2_SQRTPI 1.12837916709551257390   // 2/sqrt(pi)
+  #define M_SQRT2    1.41421356237309504880   // sqrt(2)
+  #define M_SQRT1_2  0.707106781186547524401  // 1/sqrt(2)
 #endif
 
 // Stupid. This should be removed when all the PCL dependencies have min/max fixed.
@@ -92,45 +114,8 @@ namespace pcl
 # define NOMINMAX
 #endif
 
-# define pcl_isnan(x)    _isnan(x)
-# define pcl_isfinite(x) (_finite(x) != 0)
-# define pcl_isinf(x)    (_finite(x) == 0)
-
 # define __PRETTY_FUNCTION__ __FUNCTION__
 # define __func__ __FUNCTION__
-
-#elif ANDROID
-// Use the math.h macros
-# include <math.h>
-# define pcl_isnan(x)    std::isnan(x)
-# define pcl_isfinite(x) std::isfinite(x)
-# define pcl_isinf(x)    std::isinf(x)
-
-#elif _GLIBCXX_USE_C99_MATH
-// Are the C++ cmath functions enabled?
-# include <cmath>
-# define pcl_isnan(x)    std::isnan(x)
-# define pcl_isfinite(x) std::isfinite(x)
-# define pcl_isinf(x)    std::isinf(x)
-
-#elif __PATHCC__
-# include <cmath>
-# include <stdio.h>
-template <typename T> int
-pcl_isnan (T &val)
-{
-  return (val != val);
-}
-//# define pcl_isnan(x)    std::isnan(x)
-# define pcl_isfinite(x) std::isfinite(x)
-# define pcl_isinf(x)    std::isinf(x)
-
-#else
-// Use the math.h macros
-# include <math.h>
-# define pcl_isnan(x)    isnan(x)
-# define pcl_isfinite(x) isfinite(x)
-# define pcl_isinf(x)    isinf(x)
 
 #endif
 
@@ -167,15 +152,6 @@ pcl_round (float number)
 #else
 #define pcl_lrint(x) (static_cast<long int>(pcl_round(x)))
 #define pcl_lrintf(x) (static_cast<long int>(pcl_round(x)))
-#endif
-
-
-#ifdef _WIN32
-__inline float
-log2f (float x)
-{
-  return (static_cast<float> (logf (x) * M_LOG2E));
-}
 #endif
 
 #ifdef WIN32
@@ -231,32 +207,6 @@ log2f (float x)
 #ifndef SET_ARRAY
 #define SET_ARRAY(var, value, size) { for (int i = 0; i < static_cast<int> (size); ++i) var[i]=value; }
 #endif
-
-/* //This is copy/paste from http://gcc.gnu.org/wiki/Visibility */
-/* #if defined _WIN32 || defined __CYGWIN__ */
-/*   #ifdef BUILDING_DLL */
-/*     #ifdef __GNUC__ */
-/* #define DLL_PUBLIC __attribute__((dllexport)) */
-/*     #else */
-/* #define DLL_PUBLIC __declspec(dllexport) // Note: actually gcc seems to also supports this syntax. */
-/*     #endif */
-/*   #else */
-/*     #ifdef __GNUC__ */
-/* #define DLL_PUBLIC __attribute__((dllimport)) */
-/*     #else */
-/* #define DLL_PUBLIC __declspec(dllimport) // Note: actually gcc seems to also supports this syntax. */
-/*     #endif */
-/*   #endif */
-/*   #define DLL_LOCAL */
-/* #else */
-/*   #if __GNUC__ >= 4 */
-/* #define DLL_PUBLIC __attribute__ ((visibility("default"))) */
-/* #define DLL_LOCAL  __attribute__ ((visibility("hidden"))) */
-/*   #else */
-/*     #define DLL_PUBLIC */
-/*     #define DLL_LOCAL */
-/*   #endif */
-/* #endif */
 
 #ifndef PCL_EXTERN_C
     #ifdef __cplusplus
@@ -381,3 +331,16 @@ aligned_free (void* ptr)
   #error aligned_free not supported on your platform
 #endif
 }
+
+/**
+ * \brief Macro to signal a class requires a custom allocator
+ *
+ *  It's an implementation detail to have pcl::has_custom_allocator work, a
+ *  thin wrapper over Eigen's own macro
+ *
+ * \see pcl::has_custom_allocator, pcl::make_shared
+ * \ingroup common
+ */
+#define PCL_MAKE_ALIGNED_OPERATOR_NEW \
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW \
+  using _custom_allocator_type_trait = void;

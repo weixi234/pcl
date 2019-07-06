@@ -60,17 +60,17 @@ namespace pcl
   class PCLSurfaceBase: public PCLBase<PointInT>
   {
     public:
-      typedef boost::shared_ptr<PCLSurfaceBase<PointInT> > Ptr;
-      typedef boost::shared_ptr<const PCLSurfaceBase<PointInT> > ConstPtr;
+      using Ptr = boost::shared_ptr<PCLSurfaceBase<PointInT> >;
+      using ConstPtr = boost::shared_ptr<const PCLSurfaceBase<PointInT> >;
 
-      typedef typename pcl::search::Search<PointInT> KdTree;
-      typedef typename pcl::search::Search<PointInT>::Ptr KdTreePtr;
+      using KdTree = pcl::search::Search<PointInT>;
+      using KdTreePtr = typename KdTree::Ptr;
 
       /** \brief Empty constructor. */
       PCLSurfaceBase () : tree_ () {}
       
       /** \brief Empty destructor */
-      virtual ~PCLSurfaceBase () {}
+      ~PCLSurfaceBase () {}
 
       /** \brief Provide an optional pointer to a search object.
         * \param[in] tree a pointer to the spatial search object.
@@ -118,8 +118,8 @@ namespace pcl
   class SurfaceReconstruction: public PCLSurfaceBase<PointInT>
   {
     public:
-      typedef boost::shared_ptr<SurfaceReconstruction<PointInT> > Ptr;
-      typedef boost::shared_ptr<const SurfaceReconstruction<PointInT> > ConstPtr;
+      using Ptr = boost::shared_ptr<SurfaceReconstruction<PointInT> >;
+      using ConstPtr = boost::shared_ptr<const SurfaceReconstruction<PointInT> >;
 
       using PCLSurfaceBase<PointInT>::input_;
       using PCLSurfaceBase<PointInT>::indices_;
@@ -132,14 +132,14 @@ namespace pcl
       SurfaceReconstruction () : check_tree_ (true) {}
 
       /** \brief Destructor. */
-      virtual ~SurfaceReconstruction () {}
+      ~SurfaceReconstruction () {}
 
        /** \brief Base method for surface reconstruction for all points given in
         * <setInputCloud (), setIndices ()> 
         * \param[out] output the resultant reconstructed surface model
         */
-      virtual void 
-      reconstruct (pcl::PolygonMesh &output);
+      void 
+      reconstruct (pcl::PolygonMesh &output) override;
 
       /** \brief Base method for surface reconstruction for all points given in
         * <setInputCloud (), setIndices ()> 
@@ -187,8 +187,8 @@ namespace pcl
   class MeshConstruction: public PCLSurfaceBase<PointInT>
   {
     public:
-      typedef boost::shared_ptr<MeshConstruction<PointInT> > Ptr;
-      typedef boost::shared_ptr<const MeshConstruction<PointInT> > ConstPtr;
+      using Ptr = boost::shared_ptr<MeshConstruction<PointInT> >;
+      using ConstPtr = boost::shared_ptr<const MeshConstruction<PointInT> >;
 
       using PCLSurfaceBase<PointInT>::input_;
       using PCLSurfaceBase<PointInT>::indices_;
@@ -201,7 +201,7 @@ namespace pcl
       MeshConstruction () : check_tree_ (true) {}
 
       /** \brief Destructor. */
-      virtual ~MeshConstruction () {}
+      ~MeshConstruction () {}
 
       /** \brief Base method for surface reconstruction for all points given in
         * <setInputCloud (), setIndices ()> 
@@ -212,8 +212,8 @@ namespace pcl
         * compatibility only!
         *
         */
-      virtual void 
-      reconstruct (pcl::PolygonMesh &output);
+      void 
+      reconstruct (pcl::PolygonMesh &output) override;
 
       /** \brief Base method for mesh construction for all points given in
         * <setInputCloud (), setIndices ()> 

@@ -79,15 +79,15 @@ namespace pcl
   class PassThrough : public FilterIndices<PointT>
   {
     protected:
-      typedef typename FilterIndices<PointT>::PointCloud PointCloud;
-      typedef typename PointCloud::Ptr PointCloudPtr;
-      typedef typename PointCloud::ConstPtr PointCloudConstPtr;
-      typedef typename pcl::traits::fieldList<PointT>::type FieldList;
+      using PointCloud = typename FilterIndices<PointT>::PointCloud;
+      using PointCloudPtr = typename PointCloud::Ptr;
+      using PointCloudConstPtr = typename PointCloud::ConstPtr;
+      using FieldList = typename pcl::traits::fieldList<PointT>::type;
 
     public:
 
-      typedef boost::shared_ptr< PassThrough<PointT> > Ptr;
-      typedef boost::shared_ptr< const PassThrough<PointT> > ConstPtr;
+      using Ptr = boost::shared_ptr<PassThrough<PointT> >;
+      using ConstPtr = boost::shared_ptr<const PassThrough<PointT> >;
 
 
       /** \brief Constructor.
@@ -190,13 +190,13 @@ namespace pcl
         * \param[out] output The resultant point cloud.
         */
       void
-      applyFilter (PointCloud &output);
+      applyFilter (PointCloud &output) override;
 
       /** \brief Filtered results are indexed by an indices array.
         * \param[out] indices The resultant indices.
         */
       void
-      applyFilter (std::vector<int> &indices)
+      applyFilter (std::vector<int> &indices) override
       {
         applyFilterIndices (indices);
       }
@@ -227,9 +227,9 @@ namespace pcl
   template<>
   class PCL_EXPORTS PassThrough<pcl::PCLPointCloud2> : public Filter<pcl::PCLPointCloud2>
   {
-    typedef pcl::PCLPointCloud2 PCLPointCloud2;
-    typedef PCLPointCloud2::Ptr PCLPointCloud2Ptr;
-    typedef PCLPointCloud2::ConstPtr PCLPointCloud2ConstPtr;
+    using PCLPointCloud2 = pcl::PCLPointCloud2;
+    using PCLPointCloud2Ptr = PCLPointCloud2::Ptr;
+    using PCLPointCloud2ConstPtr = PCLPointCloud2::ConstPtr;
 
     using Filter<pcl::PCLPointCloud2>::removed_indices_;
     using Filter<pcl::PCLPointCloud2>::extract_removed_indices_;
@@ -346,7 +346,7 @@ namespace pcl
 
     protected:
       void
-      applyFilter (PCLPointCloud2 &output);
+      applyFilter (PCLPointCloud2 &output) override;
 
     private:
       /** \brief Keep the structure of the data organized, by setting the

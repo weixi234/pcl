@@ -17,14 +17,17 @@ namespace pcl
     class GlobalEstimator {
       protected:
         bool computed_normals_;
-        typedef typename pcl::PointCloud<PointInT>::Ptr PointInTPtr;
-        typedef typename pcl::PointCloud<FeatureT>::Ptr FeatureTPtr;
+        using PointInTPtr = typename pcl::PointCloud<PointInT>::Ptr;
+        using FeatureTPtr = typename pcl::PointCloud<FeatureT>::Ptr;
 
         typename boost::shared_ptr<PreProcessorAndNormalEstimator<PointInT, pcl::Normal> > normal_estimator_;
 
         pcl::PointCloud<pcl::Normal>::Ptr normals_;
 
       public:
+        virtual
+        ~GlobalEstimator() = default;
+
         virtual void
         estimate (PointInTPtr & in, PointInTPtr & processed, std::vector<pcl::PointCloud<FeatureT>, Eigen::aligned_allocator<
             pcl::PointCloud<FeatureT> > > & signatures, std::vector<Eigen::Vector3f, Eigen::aligned_allocator<Eigen::Vector3f> > & centroids)=0;

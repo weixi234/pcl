@@ -37,7 +37,6 @@
 
 #pragma once
 
-#include <pcl/apps/cloud_composer/qt.h>
 #include <pcl/apps/cloud_composer/items/cloud_composer_item.h>
 
 class QAction;
@@ -56,7 +55,7 @@ namespace pcl
     {
       public:
         virtual AbstractTool*
-        createTool (PropertiesModel* parameter_model = 0, QObject* parent = 0) = 0;
+        createTool (PropertiesModel* parameter_model = nullptr, QObject* parent = nullptr) = 0;
             
         virtual PropertiesModel*
         createToolParameterModel (QObject* parent) = 0;

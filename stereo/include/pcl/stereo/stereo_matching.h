@@ -63,9 +63,9 @@ namespace pcl
   class PCL_EXPORTS StereoMatching
   {
     public:
-      StereoMatching(void);
+      StereoMatching();
 
-      virtual ~StereoMatching(void);
+      virtual ~StereoMatching();
 
       /** \brief setter for number of disparity candidates (disparity range)
         *
@@ -268,8 +268,7 @@ namespace pcl
         int den = (s1+s3-2*s2);
         if (den != 0)
           return (static_cast<short int> (16*dbest + (((s1 - s3)*8) / den)));
-        else
-          return (static_cast<short int> (dbest*16));
+        return (static_cast<short int> (dbest*16));
       }
 
       inline short int 
@@ -278,8 +277,7 @@ namespace pcl
         float den = (s1+s3-2*s2);
         if (den != 0)
           return (static_cast<short int> (16*dbest + floor(.5 + (((s1 - s3)*8) / den))));
-        else
-          return (static_cast<short int> (dbest*16));
+        return (static_cast<short int> (dbest*16));
       }
 
       inline short int 
@@ -297,8 +295,7 @@ namespace pcl
 
         if (sad_min * precision > (precision - ratio_filter) * sad_second_min)
           return (-2);
-        else	
-          return (dbest);
+        return (dbest);
       }
 
       inline short int 
@@ -316,8 +313,7 @@ namespace pcl
 
         if (sad_min * static_cast<float> (precision) > static_cast<float> (precision - ratio_filter) * sad_second_min)
           return (-2);
-        else
-          return (dbest);
+        return (dbest);
       }
 
       inline short int 
@@ -328,8 +324,7 @@ namespace pcl
 
         if (da + db < peak_filter)
           return (-4);
-        else
-          return (dbest);
+        return (dbest);
       }
 
       inline short int 
@@ -340,8 +335,7 @@ namespace pcl
 
         if (da + db < peak_filter)
           return (-4);
-        else
-          return (dbest);
+        return (dbest);
       }
 
   };
@@ -357,8 +351,8 @@ namespace pcl
   class PCL_EXPORTS GrayStereoMatching : public StereoMatching
   {
     public:
-      GrayStereoMatching (void);
-      virtual ~GrayStereoMatching (void);
+      GrayStereoMatching ();
+      ~GrayStereoMatching ();
 
       /** \brief stereo processing, it computes a disparity map stored internally by the class
         *
@@ -367,8 +361,8 @@ namespace pcl
         * \param[in] width number of elements per row for both input arrays
         * \param[in] height number of elements per column for both input arrays
         */
-      virtual void 
-      compute (unsigned char* ref_img, unsigned char* trg_img, int width, int height);
+      void 
+      compute (unsigned char* ref_img, unsigned char* trg_img, int width, int height) override;
 
       /** \brief stereo processing, it computes a disparity map stored internally by the class
         *
@@ -377,17 +371,17 @@ namespace pcl
         * \param[in] trg point cloud of pcl::RGB type containing the pixels of the target image (right image)
         * the pcl::RGB triplets are automatically converted to grayscale upon call of the method
         */
-      virtual void
-      compute (pcl::PointCloud<pcl::RGB> &ref, pcl::PointCloud<pcl::RGB> &trg);
+      void
+      compute (pcl::PointCloud<pcl::RGB> &ref, pcl::PointCloud<pcl::RGB> &trg) override;
     protected:
-      virtual void 
-      compute_impl (unsigned char* ref_img, unsigned char* trg_img) = 0;
+      void 
+      compute_impl (unsigned char* ref_img, unsigned char* trg_img) override = 0;
 
-      virtual void 
-      preProcessing (unsigned char *img, unsigned char *pp_img);
+      void 
+      preProcessing (unsigned char *img, unsigned char *pp_img) override;
 
-      virtual void 
-      imgFlip (unsigned char * & img);
+      void 
+      imgFlip (unsigned char * & img) override;
   };
 
   /** \brief Block based (or fixed window) Stereo Matching class
@@ -405,8 +399,8 @@ namespace pcl
   class PCL_EXPORTS BlockBasedStereoMatching : public GrayStereoMatching
   {
     public:
-      BlockBasedStereoMatching (void);
-      virtual ~BlockBasedStereoMatching (void) 
+      BlockBasedStereoMatching ();
+      ~BlockBasedStereoMatching () 
       {
       };
 
@@ -420,8 +414,8 @@ namespace pcl
         radius_ = radius;
       };
     private:
-      virtual void 
-      compute_impl (unsigned char* ref_img, unsigned char* trg_img);
+      void 
+      compute_impl (unsigned char* ref_img, unsigned char* trg_img) override;
 
       int radius_;
   };
@@ -442,9 +436,9 @@ namespace pcl
   class PCL_EXPORTS AdaptiveCostSOStereoMatching : public GrayStereoMatching
   {
     public:
-      AdaptiveCostSOStereoMatching (void);
+      AdaptiveCostSOStereoMatching ();
 
-      virtual ~AdaptiveCostSOStereoMatching (void) 
+      ~AdaptiveCostSOStereoMatching () 
       {
       };
 
@@ -495,8 +489,8 @@ namespace pcl
       };
 
     private:
-      virtual void 
-      compute_impl (unsigned char* ref_img, unsigned char* trg_img);
+      void 
+      compute_impl (unsigned char* ref_img, unsigned char* trg_img) override;
 
       int radius_;
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <boost/shared_ptr.hpp>
+
 #include <pcl/tracking/coherence.h>
 
 namespace pcl
@@ -15,6 +17,8 @@ namespace pcl
     class DistanceCoherence: public PointCoherence<PointInT>
     {
     public:
+
+      using Ptr = boost::shared_ptr<DistanceCoherence<PointInT> >;
       
       /** \brief initialize the weight to 1.0. */
       DistanceCoherence ()
@@ -36,7 +40,7 @@ namespace pcl
         * \param source instance of source point.
         * \param target instance of target point.
         */
-      double computeCoherence (PointInT &source, PointInT &target);
+      double computeCoherence (PointInT &source, PointInT &target) override;
 
       /** \brief the weight of coherence.*/
       double weight_;

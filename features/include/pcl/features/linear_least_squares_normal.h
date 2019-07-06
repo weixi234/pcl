@@ -51,10 +51,10 @@ namespace pcl
   class LinearLeastSquaresNormalEstimation : public Feature<PointInT, PointOutT>
   {
     public:
-      typedef boost::shared_ptr<LinearLeastSquaresNormalEstimation<PointInT, PointOutT> > Ptr;
-      typedef boost::shared_ptr<const LinearLeastSquaresNormalEstimation<PointInT, PointOutT> > ConstPtr;
-      typedef typename Feature<PointInT, PointOutT>::PointCloudIn  PointCloudIn;
-      typedef typename Feature<PointInT, PointOutT>::PointCloudOut PointCloudOut;
+      using Ptr = boost::shared_ptr<LinearLeastSquaresNormalEstimation<PointInT, PointOutT> >;
+      using ConstPtr = boost::shared_ptr<const LinearLeastSquaresNormalEstimation<PointInT, PointOutT> >;
+      using PointCloudIn = typename Feature<PointInT, PointOutT>::PointCloudIn;
+      using PointCloudOut = typename Feature<PointInT, PointOutT>::PointCloudOut;
       using Feature<PointInT, PointOutT>::input_;
       using Feature<PointInT, PointOutT>::feature_name_;
       using Feature<PointInT, PointOutT>::tree_;
@@ -72,7 +72,7 @@ namespace pcl
       };
 
       /** \brief Destructor */
-      virtual ~LinearLeastSquaresNormalEstimation ();
+      ~LinearLeastSquaresNormalEstimation ();
 
       /** \brief Computes the normal at the specified position. 
         * \param[in] pos_x x position (pixel)
@@ -114,8 +114,8 @@ namespace pcl
       /** \brief Provide a pointer to the input dataset (overwrites the PCLBase::setInputCloud method)
         * \param[in] cloud the const boost shared pointer to a PointCloud message
         */
-      virtual inline void 
-      setInputCloud (const typename PointCloudIn::ConstPtr &cloud) 
+      inline void 
+      setInputCloud (const typename PointCloudIn::ConstPtr &cloud) override 
       { 
         input_ = cloud; 
       }
@@ -125,7 +125,7 @@ namespace pcl
         * \param[out] output the resultant normals
         */
       void 
-      computeFeature (PointCloudOut &output);
+      computeFeature (PointCloudOut &output) override;
 
     private:
 

@@ -54,13 +54,13 @@ namespace pcl
   {
     public:
       // ===== TYPEDEFS =====
-      typedef pcl::PointCloud<PointXYZRGBA> BaseClass;
+      using BaseClass = pcl::PointCloud<PointXYZRGBA>;
 
       // =====CONSTRUCTOR & DESTRUCTOR=====
       /** Constructor */
       BearingAngleImage ();
       /** Destructor */
-      virtual ~BearingAngleImage ();
+      ~BearingAngleImage ();
 
     public:
       /** \brief Reset all values to an empty Bearing Angle image */

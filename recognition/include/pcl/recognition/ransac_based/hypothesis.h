@@ -81,7 +81,7 @@ namespace pcl
     class Hypothesis: public HypothesisBase
     {
       public:
-        Hypothesis (const ModelLibrary::Model* obj_model = NULL)
+        Hypothesis (const ModelLibrary::Model* obj_model = nullptr)
          : HypothesisBase (obj_model),
            match_confidence_ (-1.0f),
            linear_id_ (-1)
@@ -95,7 +95,7 @@ namespace pcl
         {
         }
 
-        virtual ~Hypothesis (){}
+        ~Hypothesis (){}
 
         const Hypothesis&
         operator =(const Hypothesis& src)

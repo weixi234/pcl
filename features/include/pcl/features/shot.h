@@ -68,8 +68,8 @@ namespace pcl
                              public FeatureWithLocalReferenceFrames<PointInT, PointRFT>
   {
     public:
-      typedef boost::shared_ptr<SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT> > Ptr;
-      typedef boost::shared_ptr<const SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT> > ConstPtr;
+      using Ptr = boost::shared_ptr<SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT> >;
+      using ConstPtr = boost::shared_ptr<const SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT> >;
       using Feature<PointInT, PointOutT>::feature_name_;
       using Feature<PointInT, PointOutT>::getClassName;
       using Feature<PointInT, PointOutT>::input_;
@@ -82,7 +82,7 @@ namespace pcl
       using FeatureFromNormals<PointInT, PointNT, PointOutT>::normals_;
       using FeatureWithLocalReferenceFrames<PointInT, PointRFT>::frames_;
 
-      typedef typename Feature<PointInT, PointOutT>::PointCloudIn PointCloudIn;
+      using PointCloudIn = typename Feature<PointInT, PointOutT>::PointCloudIn;
 
     protected:
       /** \brief Empty constructor.
@@ -90,7 +90,7 @@ namespace pcl
         */
       SHOTEstimationBase (int nr_shape_bins = 10) :
         nr_shape_bins_ (nr_shape_bins),
-        shot_ (), lrf_radius_ (0),
+        lrf_radius_ (0),
         sqradius_ (0), radius3_4_ (0), radius1_4_ (0), radius1_2_ (0),
         nr_grid_sector_ (32),
         maxAngularSectors_ (32),
@@ -103,7 +103,7 @@ namespace pcl
     public:
 
       /** \brief Empty destructor */
-      virtual ~SHOTEstimationBase () {}
+      ~SHOTEstimationBase () {}
 
        /** \brief Estimate the SHOT descriptor for a given point based on its spatial neighborhood of 3D points with normals
          * \param[in] index the index of the point in indices_
@@ -128,8 +128,8 @@ namespace pcl
     protected:
 
       /** \brief This method should get called before starting the actual computation. */
-      virtual bool
-      initCompute ();
+      bool
+      initCompute () override;
 
       /** \brief Quadrilinear interpolation used when color and shape descriptions are NOT activated simultaneously
         *
@@ -219,8 +219,8 @@ namespace pcl
   class SHOTEstimation : public SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>
   {
     public:
-      typedef boost::shared_ptr<SHOTEstimation<PointInT, PointNT, PointOutT, PointRFT> > Ptr;
-      typedef boost::shared_ptr<const SHOTEstimation<PointInT, PointNT, PointOutT, PointRFT> > ConstPtr;
+      using Ptr = boost::shared_ptr<SHOTEstimation<PointInT, PointNT, PointOutT, PointRFT> >;
+      using ConstPtr = boost::shared_ptr<const SHOTEstimation<PointInT, PointNT, PointOutT, PointRFT> >;
       using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::feature_name_;
       using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::getClassName;
       using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::indices_;
@@ -242,7 +242,7 @@ namespace pcl
       using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::shot_;
       using FeatureWithLocalReferenceFrames<PointInT, PointRFT>::frames_;
 
-      typedef typename Feature<PointInT, PointOutT>::PointCloudIn PointCloudIn;
+      using PointCloudIn = typename Feature<PointInT, PointOutT>::PointCloudIn;
 
       /** \brief Empty constructor. */
       SHOTEstimation () : SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT> (10)
@@ -251,7 +251,7 @@ namespace pcl
       };
       
       /** \brief Empty destructor */
-      virtual ~SHOTEstimation () {}
+      ~SHOTEstimation () {}
 
       /** \brief Estimate the SHOT descriptor for a given point based on its spatial neighborhood of 3D points with normals
         * \param[in] index the index of the point in indices_
@@ -259,11 +259,11 @@ namespace pcl
         * \param[in] sqr_dists the k-neighborhood point distances in surface_
         * \param[out] shot the resultant SHOT descriptor representing the feature at the query point
         */
-      virtual void
+      void
       computePointSHOT (const int index,
                         const std::vector<int> &indices,
                         const std::vector<float> &sqr_dists,
-                        Eigen::VectorXf &shot);
+                        Eigen::VectorXf &shot) override;
     protected:
       /** \brief Estimate the Signatures of Histograms of OrienTations (SHOT) descriptors at a set of points given by
         * <setInputCloud (), setIndices ()> using the surface in setSearchSurface () and the spatial locator in
@@ -271,7 +271,7 @@ namespace pcl
         * \param output the resultant point cloud model dataset that contains the SHOT feature estimates
         */
       void
-      computeFeature (pcl::PointCloud<PointOutT> &output);
+      computeFeature (pcl::PointCloud<PointOutT> &output) override;
   };
 
   /** \brief SHOTColorEstimation estimates the Signature of Histograms of OrienTations (SHOT) descriptor for a given point cloud dataset
@@ -297,8 +297,8 @@ namespace pcl
   class SHOTColorEstimation : public SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>
   {
     public:
-      typedef boost::shared_ptr<SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT> > Ptr;
-      typedef boost::shared_ptr<const SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT> > ConstPtr;
+      using Ptr = boost::shared_ptr<SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT> >;
+      using ConstPtr = boost::shared_ptr<const SHOTColorEstimation<PointInT, PointNT, PointOutT, PointRFT> >;
       using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::feature_name_;
       using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::getClassName;
       using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::indices_;
@@ -320,7 +320,7 @@ namespace pcl
       using SHOTEstimationBase<PointInT, PointNT, PointOutT, PointRFT>::shot_;
       using FeatureWithLocalReferenceFrames<PointInT, PointRFT>::frames_;
 
-      typedef typename Feature<PointInT, PointOutT>::PointCloudIn PointCloudIn;
+      using PointCloudIn = typename Feature<PointInT, PointOutT>::PointCloudIn;
 
       /** \brief Empty constructor.
         * \param[in] describe_shape
@@ -337,7 +337,7 @@ namespace pcl
       };
       
       /** \brief Empty destructor */
-      virtual ~SHOTColorEstimation () {}
+      ~SHOTColorEstimation () {}
 
       /** \brief Estimate the SHOT descriptor for a given point based on its spatial neighborhood of 3D points with normals
         * \param[in] index the index of the point in indices_
@@ -345,11 +345,11 @@ namespace pcl
         * \param[in] sqr_dists the k-neighborhood point distances in surface_
         * \param[out] shot the resultant SHOT descriptor representing the feature at the query point
         */
-      virtual void
+      void
       computePointSHOT (const int index,
                         const std::vector<int> &indices,
                         const std::vector<float> &sqr_dists,
-                        Eigen::VectorXf &shot);
+                        Eigen::VectorXf &shot) override;
     protected:
       /** \brief Estimate the Signatures of Histograms of OrienTations (SHOT) descriptors at a set of points given by
         * <setInputCloud (), setIndices ()> using the surface in setSearchSurface () and the spatial locator in
@@ -357,7 +357,7 @@ namespace pcl
         * \param output the resultant point cloud model dataset that contains the SHOT feature estimates
         */
       void
-      computeFeature (pcl::PointCloud<PointOutT> &output);
+      computeFeature (pcl::PointCloud<PointOutT> &output) override;
 
       /** \brief Quadrilinear interpolation; used when color and shape descriptions are both activated
         * \param[in] indices the neighborhood point indices

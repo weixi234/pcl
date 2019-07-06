@@ -54,15 +54,15 @@ namespace pcl
   class RGBPlaneCoefficientComparator: public PlaneCoefficientComparator<PointT, PointNT>
   {
     public:
-      typedef typename Comparator<PointT>::PointCloud PointCloud;
-      typedef typename Comparator<PointT>::PointCloudConstPtr PointCloudConstPtr;
+      using PointCloud = typename Comparator<PointT>::PointCloud;
+      using PointCloudConstPtr = typename Comparator<PointT>::PointCloudConstPtr;
       
-      typedef typename pcl::PointCloud<PointNT> PointCloudN;
-      typedef typename PointCloudN::Ptr PointCloudNPtr;
-      typedef typename PointCloudN::ConstPtr PointCloudNConstPtr;
+      using PointCloudN = pcl::PointCloud<PointNT>;
+      using PointCloudNPtr = typename PointCloudN::Ptr;
+      using PointCloudNConstPtr = typename PointCloudN::ConstPtr;
       
-      typedef boost::shared_ptr<RGBPlaneCoefficientComparator<PointT, PointNT> > Ptr;
-      typedef boost::shared_ptr<const RGBPlaneCoefficientComparator<PointT, PointNT> > ConstPtr;
+      using Ptr = boost::shared_ptr<RGBPlaneCoefficientComparator<PointT, PointNT> >;
+      using ConstPtr = boost::shared_ptr<const RGBPlaneCoefficientComparator<PointT, PointNT> >;
 
       using pcl::Comparator<PointT>::input_;
       using pcl::PlaneCoefficientComparator<PointT, PointNT>::normals_;
@@ -84,7 +84,7 @@ namespace pcl
       }
       
       /** \brief Destructor for RGBPlaneCoefficientComparator. */
-      virtual
+      
       ~RGBPlaneCoefficientComparator ()
       {
       }
@@ -110,7 +110,7 @@ namespace pcl
         * \param[in] idx2 The index of the second point.
         */
       bool
-      compare (int idx1, int idx2) const
+      compare (int idx1, int idx2) const override
       {
         float dx = input_->points[idx1].x - input_->points[idx2].x;
         float dy = input_->points[idx1].y - input_->points[idx2].y;

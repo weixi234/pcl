@@ -36,7 +36,7 @@
 
 #pragma once
 
-#include <pcl/apps/modeler/qt.h>
+#include <QTreeWidget>
 
 namespace pcl
 {
@@ -50,11 +50,11 @@ namespace pcl
       Q_OBJECT
 
       public:
-        SceneTree(QWidget * parent = 0);
+        SceneTree(QWidget * parent = nullptr);
         ~SceneTree();
 
-        virtual QSize
-        sizeHint() const;
+        QSize
+        sizeHint() const override;
 
         bool 
         openPointCloud(const QString& filename);
@@ -106,11 +106,11 @@ namespace pcl
         itemInsertedOrRemoved();
 
       protected:
-        virtual void
-        dropEvent(QDropEvent * event);
+        void
+        dropEvent(QDropEvent * event) override;
 
-        virtual bool
-        dropMimeData(QTreeWidgetItem * parent, int index, const QMimeData * data, Qt::DropAction action);
+        bool
+        dropMimeData(QTreeWidgetItem * parent, int index, const QMimeData * data, Qt::DropAction action) override;
 
       private Q_SLOTS:
         void
@@ -132,8 +132,8 @@ namespace pcl
         static void
         closePointCloud(const QList<CloudMeshItem*>& items);
 
-        virtual void
-        contextMenuEvent(QContextMenuEvent *event);
+        void
+        contextMenuEvent(QContextMenuEvent *event) override;
     };
   }
 }
